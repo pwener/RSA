@@ -1,33 +1,38 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include "algebra.h"
 
-/*
-* Verifica se um numero é impar
-*/
+/**
+ *	[EN] This method check if an integer number is odd
+ *	[PT] Esse metodo verifica se um numero inteiro e par
+ *	@param input_number a integer number
+ *	@return TRUE if is Odd or FALSE if is Even
+ */
 Boolean is_odd(int input_number)
 {
-	if(input_number % 2 == 0){
-		return FALSE;
-	}
-	else
+	Boolean isOdd = FALSE;
+	if(input_number % 2 == 1)
 	{
-		return TRUE;
+		isOdd = TRUE;
 	}
+	return isOdd;
 }
 
-/*
-*
-*/
-unsigned int random_positive_number(unsigned int minimum_number, unsigned int maximum_number){
+/**
+ *	[EN] This method return a random natural number from the range:
+ *	[PT] Esse metodo retorna um numero natural aleatorio do alcance:
+ *	a < or = x < or = b
+ *	@param minimum_number (a)
+ *	@param maximum_number (b)
+ *	@return random_number (x)
+ */
+unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number){
+	unsigned int random_number = 0;
 	
 }
 
-/*
-* Tenta achar dois numeros d e s tais que  n-1 = 2^s * d, onde d é impar
-* Retorna um vetor de inteiros contendo s e d respectivamente
-*/
+/**
+ *	Tenta achar dois numeros d e s tais que  n-1 = 2^s * d, onde d é impar
+ *	Retorna um vetor de inteiros contendo s e d respectivamente
+ */
 Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number){
 	int s, d;
 	Two_Natural_Numbers factors;
