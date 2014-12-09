@@ -1,5 +1,8 @@
 #ifndef ALGEBRA_H_
 #define ALGEBRA_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 typedef enum Boolean
 {
@@ -11,7 +14,6 @@ typedef struct Two_Natural_Numbers
 {
 	unsigned int first_number;
 	unsigned int second_number;
-	Two_Natural_Numbers(){first_number = 0, second_number = 0;}
 }Two_Natural_Numbers;
 
 Boolean is_odd(int input_number);
