@@ -25,8 +25,9 @@ Boolean is_odd(int input_number)
  *	@return random_number (x)
  */
 unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number){
-	unsigned int random_number = 0;
-	
+	srand(time(NULL));
+	unsigned int random_number = (rand() % (maximum_number - minimum_number + 1)) + minimum_number;
+	return random_number;
 }
 
 /**
