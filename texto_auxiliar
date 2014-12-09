@@ -1,0 +1,10 @@
+	A criptografia é uma área que se dedica ao estudo de princípios e técnicas que convertam informação de seu formato original a um formato ilegível, com o principal objetivo de garantir que o acesso àquela informação seja concedido apenas à entidades autorizadas. Ou seja, a criptografia é aplicada na segurança da informação com o intuito de proteger dados e é utilizada, por exemplo, em processos de comunicação digital e armazenamento de dados. Ex: compras online, senhas digitais, bancos de dados, etc.
+	Neste trabalho, procurarei explicar quatro técnicas de criptografia, mas antes disso, vou explicar alguns termos importantes do universo da criptografia.
+	* Encriptação: é a conversão de dados legíveis para um formato ilegível por pessoas não autorizadas, seu objetivo, como já foi dito, é a proteção da privacidade do conteúdo dos dados.
+	* Desencriptação: é o processo inverso da encriptação, converte dados encriptados no seu formato original.
+	* Texto puro: é o texto no seu formato original, quando os dados ainda não foram encriptados.
+	* Texto cifrado: quando o texto original passa por um processo de encriptação de dados e seus dados foram convertidos para um formato ilegível.
+	* Chave: Dados utilizados para encriptar um texto puro.
+	* Algoritmo de Criptografia: Um conjunto de instruções computacionais que realize a encriptação ou desencriptação de dados.
+
+ 
