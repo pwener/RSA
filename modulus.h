@@ -5,4 +5,11 @@
 
 unsigned int modulus(int input_number, unsigned int modulus_number);
 
+Boolean is_congruent(int a_number, int b_number, unsigned int modulus_number);
+
+unsigned int euler_totient(unsigned int input_number);
+
+Boolean check_primality_as_Xzero(unsigned int input_number, unsigned int exponant_number,
+	unsigned int modulus_number);
+
 #endif // MODULUS_H_

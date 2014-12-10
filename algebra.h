@@ -19,6 +19,7 @@ typedef struct Two_Natural_Numbers
 
 Boolean is_odd(int input_number);
 Boolean is_negative(int input_number);
+Boolean is_divisible(int numerator_number, int denominator_number);
 
 unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number);
 
