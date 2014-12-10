@@ -4,7 +4,7 @@
 /*
 	return TRUE if possible_prime is prime
 */
-Boolean test_msr(unsigned int possible_prime)
+Boolean test_primality_msr(unsigned int possible_prime)
 {
 	Boolean is_prime = FALSE;
 	if(is_odd(possible_prime) == TRUE)

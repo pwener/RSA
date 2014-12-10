@@ -39,29 +39,6 @@ Boolean is_congruent(int a_number, int b_number, unsigned int modulus_number)
 }
 
 /**
- *	[EN] This method returns a modular number (a), that satisfies:
- *	[PT] Esse metodo retorna um numero em modulo (a), que satisfaz:
- *	n|(a - r)
- *	@param residue_number (r)
- *	@param modulus_number (n)
- *	@return output_number (a) a positive number
- */
-unsigned int congruence_exponant(unsigned int input_number,
-	unsigned int exponant_number, int modulus_number)
-{
-	unsigned int output_number = modulus(pow(input_number,1),modulus_number);
-	unsigned int exponant_reference = 2;
-	while(exponant_reference < exponant_number)
-	{
-		output_number = modulus(pow(output_number,exponant_reference),modulus_number);
-		if(is_divisible(exponant_number, exponant_reference)==TRUE)
-		{
-
-		}
-	}
-}
-
-/**
  *	[EN] This method discover the quantity of numbers n < x who not satisfies x|n
  *	[PT] Esse metodo descobre a quantitade de numeros n < x que nao satisfaz x|n
  *	@param input_number (x)
@@ -80,12 +57,4 @@ unsigned int euler_totient(unsigned int input_number)
 		associated_number++;
 	}
 	return phi;
-}
-
-
-
-Boolean check_primality_as_xzero(unsigned int input_number,
-	unsigned int exponant_number, unsigned int modulus_number)
-{
-	return FALSE;
 }

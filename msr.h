@@ -6,7 +6,7 @@
 #include "algebra.h"
 #include "modulus.h"
 
-typedef struct MSR
+typedef struct Miller_Selfridge_Rabin
 {
 	unsigned int possible_prime;
 	unsigned int t;
@@ -14,7 +14,7 @@ typedef struct MSR
 	unsigned int a;
 }MSR;
 
-Boolean test_msr(unsigned int possible_prime);
+Boolean test_primality_msr(unsigned int possible_prime);
 Boolean havent_witness(MSR msr);
 
 #endif
