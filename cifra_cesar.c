@@ -57,7 +57,7 @@ int main(void) {
 		encriptar(texto, n_de_cesar);
 		printf("Texto encriptado: %s\n", texto);
 		desencriptar(texto, n_de_cesar);
-		printf("Texto desencriptado: %s\n\n", texto);
+		printf("Texto decifrado: %s\n\n", texto);
 	} else if (modo_de_jogo == 2) {
 		printf("Geração aleatória do \"n\" de César\n");
 		srand(time(NULL));
@@ -70,7 +70,7 @@ int main(void) {
 		printf("Texto encriptado: %s\n", texto);		
 		forca_bruta(texto);
 		printf("\n");
-		printf("Texto desencriptado: %s\n\n", texto);
+		printf("Texto decifrado: %s\n\n", texto);
 	} else {
 		printf("Opção inválida! Programa encerrado!\n");
 	}

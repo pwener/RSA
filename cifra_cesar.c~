@@ -33,6 +33,10 @@ boolean verificar_letra_minuscula(char letra);
 
 boolean verificar_letra_maiuscula(char letra);
 
+
+/*
+Este programa possui dois modos de execução. O modo explicativo explica ao usuário como funciona a cifra de César e o modo Hardcore mostra na prática como é feita a decifração de um texto cifrado sem ter em mãos a chave correta (força bruta).
+*/
 int main(void) {
 	int n_de_cesar, modo_de_jogo;
 	char* texto = malloc(MAX_LENGTH * sizeof(char));
