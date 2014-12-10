@@ -72,10 +72,9 @@ unsigned int random_natural_number(unsigned int minimum_number, unsigned int max
  *		second_number (d) an odd value
  */
 Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number){
-	unsigned int s = 0;
-	unsigned int d = 0;
+	unsigned int s = 1;
+	unsigned int d = 1;
 	Two_Natural_Numbers factors;
-
 	for(s = 1; s < input_number; s++)
 	{
 		for(d = 1; d < (input_number/s); d++)
