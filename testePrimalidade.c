@@ -12,7 +12,7 @@ int d;
 * Operador modulo da aritmética modular - teoria dos numeros
 * retorna o modulo n de um numero x
 */
-int modulo(double x, int n){
+int mod(int x, int n){
 	if(x<0){
                 return (int)(x%n)+x;
         }
@@ -105,15 +105,16 @@ void teste(){
 					result = mod(result*a, n);
 					z++;
 				}
-			}	
-		
+			}
 			if(result == 1){
 				i++;
 				break;
+			}else{
+				printf("\nO número é possivel primo\n");
 			}
 		}
 		if( i > 0){
-			printf("O número é possivel primo\n" );
+			printf("O número é possivel primo\n");
 		}else{
 			printf("\nO número é composto\n");
 		}
