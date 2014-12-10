@@ -6,8 +6,16 @@
 #include "algebra.h"
 #include "modulus.h"
 
-int get_number_of_times(int target);
+typedef struct MSR
+{
+	unsigned int possible_prime;
+	unsigned int t;
+	unsigned int m;
+	unsigned int a;
+}MSR;
+
 Boolean test_msr(unsigned int possible_prime);
+Boolean havent_witness(MSR msr);
 
 #endif
 
