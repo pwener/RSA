@@ -23,6 +23,25 @@ unsigned int modulus(int input_number, unsigned int modulus_number)
 	return output_number;
 }
 
+unsigned int exponential_modulus(int base, int exponant, int modulus_number){
+	unsigned int result = 0;
+	result = modulus(base, modulus_number);
+	int count = 1;
+	while(count < exponant)
+	{
+		if(result > modulus_number)
+		{
+			result = modulus(result, modulus_number);
+		}
+		else
+		{
+			result = modulus(result*base, modulus_number);
+			count++;
+		}
+	}
+	return result;
+}
+
 /**
  *	[EN] This method check if the congruence is valid
  *	[PT] Esse metodo verifica se a congruencia e valida

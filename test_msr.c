@@ -4,18 +4,20 @@
 
 int main(){
 	int x;
-	/* for(x = 4; x < 300; x++){
-		if(test_msr(x)){
+	for(x = 4; x < 100; x++){
+		if(test_primality_msr(x)){
 			printf("%d , ", x);
 		}
-	} */
+	}
+
 	printf("\n\n");
-	if(test_msr(8969))
+	if(test_primality_msr(8969))
 	{
 			printf("8969\n");
 	}
+
 	printf("\n\n");
-	if(test_msr(13711))
+	if(test_primality_msr(13711))
 	{
 			printf("13711\n");
 	}
