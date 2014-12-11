@@ -2,7 +2,7 @@
 
 long file_size(char *path)
 {
-	FILE *target = fopen(path, "rb");
+	FILE *target = fopen(path, "r");
 	fseek(target, 0, SEEK_END);
 	long file_size = ftell(target);
 	fclose(target);
@@ -10,12 +10,12 @@ long file_size(char *path)
 }
 
 
-char *get_text(char *path)
+char *get_text_by_file(char *path)
 {
 	char *text;
 	long size = file_size(path);
 	text = (char*) malloc(size * (sizeof(char)));
-	FILE *target = fopen(path, "rb");
+	FILE *target = fopen(path, "r");
 	rewind(target);
 	fread(text, sizeof(char), size, target);
 	fclose(target);
@@ -23,13 +23,21 @@ char *get_text(char *path)
 
 }
 
+char *receive_string_from_user(unsigned int text_size)
+{
+	char* text_input = (char*) malloc(text_size*(sizeof(char)));
+	fgets(text_input, text_size, stdin);
+	text_input[strlen(text_input)-1] = '\0';
+	return text_input;
+}
+
 Boolean export_text_to_file(char *text_input)
 {
 	Boolean is_exportation_worked_fine = FALSE;
-	FILE *standard_text_file = fopen("/text/exported.txt", "w");
-	fwrite(text_input, sizeof(text_input), 1, standard_text_file);
+	FILE *standard_text_file = fopen("text/exported.txt", "w");
+	fprintf(standard_text_file, "%s", text_input);
 	fclose(standard_text_file);
-	if(strcmp(get_text("/text/exported.txt"),text_input)==0)
+	if(strcmp(get_text_by_file("text/exported.txt"),text_input)==0)
 	{
 		is_exportation_worked_fine = TRUE;
 	}

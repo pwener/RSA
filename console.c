@@ -45,7 +45,12 @@ Options run_rsa_functions(Options previous_options)
 	}
 	else if(options.rsa == RSANONE)
 	{
-		if(options.text == TXTFILE)
+		if(options.text == TXTSUCCESS)
+		{
+			inform_rsa_option();
+			options = receive_rsa_option(options);
+		}
+		else if(options.text == TXTFILE)
 		{
 			explain_text_upload_by_file();
 			options = receive_text_by_file(options);
@@ -68,8 +73,8 @@ Options run_rsa_functions(Options previous_options)
 	}
 	else if(options.rsa == RSAPREVIOUS)
 	{
-		printf("OK3");
-		press_any_key();
+		option.text == TXTNONE;
+		option.type == NONE;
 	}
 	return options;
 }
@@ -157,10 +162,9 @@ Options receive_text_upload_option(Options previous_options)
 Options receive_text_by_file(Options previous_options)
 {
 	Options options = previous_options;
-	char* path_input;
 	print_response_symbol();
-	gets(path_input);
-	char* text_input = get_text(path_input);
+	char* path_input = receive_string_from_user(80);
+	char* text_input = get_text_by_file(path_input);
 	if(text_input==NULL)
 	{
 		inform_wrong_path();
@@ -173,6 +177,7 @@ Options receive_text_by_file(Options previous_options)
 		{
 			inform_text_is_fine();
 			press_any_key();
+			options.text = TXTSUCCESS;
 		}
 		else if(is_exportation_worked_fine == FALSE)
 		{
@@ -180,20 +185,22 @@ Options receive_text_by_file(Options previous_options)
 			press_any_key();
 		}
 	}
+	free(path_input);
+	free(text_input);
 	return options;
 }
 
 Options receive_text_by_user(Options previous_options)
 {
 	Options options = previous_options;
-	char* text_input;
 	print_response_symbol();
-	gets(text_input);
+	char* text_input = receive_string_from_user(500);
 	Boolean is_exportation_worked_fine = export_text_to_file(text_input);
 	if(is_exportation_worked_fine == TRUE)
 	{
 		inform_text_is_fine();
 		press_any_key();
+		options.text = TXTSUCCESS;
 	}
 	else if(is_exportation_worked_fine == FALSE)
 	{

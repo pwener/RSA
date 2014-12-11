@@ -59,6 +59,7 @@ Options receive_type_option(Options previous_options);
 Options receive_text_upload_option(Options previous_options);
 Options receive_text_by_file(Options previous_options);
 Options receive_text_by_user(Options previous_options);
+Options receive_rsa_option(Options previous_options);
 
 void print_authors();
 void print_institute();
@@ -81,6 +82,9 @@ void explain_text_upload_by_file();
 void explain_text_upload_by_user();
 void inform_wrong_path();
 void inform_text_is_fine();
+
+void inform_rsa_option();
+
 void inform_unknown_error();
 
 #endif // CONSOLE_H_
