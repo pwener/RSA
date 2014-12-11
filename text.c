@@ -34,6 +34,7 @@ int numberoflines(FILE *input_file)
 		if(s == '\n')
 			number_of_lines++;
 	}
+	rewind(input_file);
 	return number_of_lines;
 }
 
