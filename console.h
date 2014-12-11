@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "text.h"
+#include "rsa.h"
 
 typedef enum Main_Option
 {
@@ -15,7 +16,7 @@ typedef enum Type_Option
 {
 	NONE,
 	RSA,
-	MSR
+	TYPMSR
 }Type_Opt;
 
 typedef enum Miller_Selfridge_Rabin_Option
@@ -56,6 +57,8 @@ Options run_functions(Options previous_options);
 Options run_rsa_functions(Options previous_options);
 Options run_msr_functions(Options previous_options);
 Options run_test_primality(Options previous_options);
+Options run_encrypt_functions(Options previous_options);
+Options run_decrypt_functions(Options previous_options);
 
 Options get_standard_options_values();
 Options receive_type_option(Options previous_options);
@@ -63,7 +66,7 @@ Options receive_text_upload_option(Options previous_options);
 Options receive_text_by_file(Options previous_options);
 Options receive_text_by_user(Options previous_options);
 Options receive_rsa_option(Options previous_options);
-Options receive_msr_option(Options previous_options);
+//Options receive_msr_option(Options previous_options);
 
 Boolean check_possibly_prime_number(unsigned int possibly_prime_number);
 
@@ -91,7 +94,7 @@ void inform_text_is_fine();
 
 void inform_rsa_option();
 
-void explain_miller_selfridge_rabin();
+//void explain_miller_selfridge_rabin();
 
 void inform_unknown_error();
 

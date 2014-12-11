@@ -10,7 +10,7 @@ Options run_functions(Options previous_options)
 	{
 		options = run_rsa_functions(options);
 	}
-	else if(options.type == MSR)
+	else if(options.type == TYPMSR)
 	{
 		options = run_msr_functions(options);
 	}
@@ -30,15 +30,16 @@ Options run_rsa_functions(Options previous_options)
 	Options options = previous_options;
 	if(options.rsa == RSAENCRYPT)
 	{
-		run_encrypt_functions();
+		options = run_encrypt_functions(options);
+		press_enter();
 	}
 	else if(options.rsa == RSADECRYPT)
 	{
-		run_decrypt_functions();
+		options = run_decrypt_functions(options);
 	}
 	else if(options.rsa == RSAHACK)
 	{
-		run_hack_functions();
+		//run_hack_functions();
 	}
 	else if(options.rsa == RSANONE)
 	{
@@ -86,8 +87,8 @@ Options run_msr_functions(Options previous_options)
 	}
 	else if(options.msr == MSRNONE)
 	{
-		explain_miller_selfridge_rabin();
-		options = receive_msr_option(options);
+		//explain_miller_selfridge_rabin();
+		//options = receive_msr_option(options);
 	}
 	else if(options.msr == MSRPREVIOUS)
 	{
@@ -102,21 +103,41 @@ Options run_test_primality(Options previous_options)
 {
 	Options options = previous_options;
 
-	unsigned int possibly_prime_number =  receive_number();
-	Boolean is_number_prime = check_possibly_prime_number(possibly_prime_number);
-	if(is_number_prime==TRUE)
-	{
-		inform_its_prime();
-	}
-	else if(is_number_prime==FALSE)
-	{
-		inform_its_composite();
-	}
+	// unsigned int possibly_prime_number = receive_number();
+	// Boolean is_number_prime = check_possibly_prime_number(possibly_prime_number);
+	//if(is_number_prime==TRUE)
+	//{
+		//inform_its_prime();
+	//}
+	//else if(is_number_prime==FALSE)
+	//{
+		//inform_its_composite();
+	//}
 
 	options.msr = MSRNONE;
 	
 	return options;
 }
+
+Options run_encrypt_functions(Options previous_options)
+{
+	Options options = previous_options;
+	char *text_reference = get_text_by_file((char*)"text/exported.txt");
+
+	rsa_algorithm(text_reference,61,53);
+
+	options = get_standard_options_values();
+
+	return options;
+}
+
+Options run_decrypt_functions(Options previous_options)
+{
+	Options options = previous_options;
+
+	return options;
+}
+
 
 // Option Methods
 
@@ -145,7 +166,7 @@ Options receive_type_option(Options previous_options)
 		break;
 
 		case 2:
-			options.type = MSR;
+			options.type = TYPMSR;
 		break;
 
 		case 0:

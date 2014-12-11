@@ -1,37 +1,24 @@
-#include "msr.h"
-#include "modulus.h"
-#include "text.h"
-#include <time.h>
+#include "rsa.h"
 
-
-typedef struct public_key {
-	int rsa_modulus;
-	int coprime;
-} Public_Key;
-
-typedef struct private_key {
-	int rsa_modulus;
-	int modular_multiplicative_inverse;
-} Private_Key;
-
-void rsa(char* text, int first_prime, int second_prime)
+void rsa_algorithm(char* text, int first_prime, int second_prime)
 {
 	int rsa_modulus = first_prime * second_prime;
 	int euler_totient = (first_prime - 1) * (second_prime - 1);
 	int coprime = find_coprime(euler_totient);
 	int modular_multiplicative_inverse = find_modular_multiplicative_inverse(coprime, euler_totient);		
-	Public_Key public_key = malloc(sizeof(Public_Key));
-	Private_Key private_key = malloc(sizeof(Private_Key));
+	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
+	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
 	public_key->rsa_modulus = rsa_modulus;	
 	public_key->coprime = coprime;
 	private_key->rsa_modulus = rsa_modulus;
-	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;		
-	
+	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;
+	encrypt(text,public_key);
+	decrypt(text,private_key,public_key);
 }
 
 int read_number() 
 {
-	int number = malloc(sizeof(int));
+	int number = 0;
 	Boolean valid_input = FALSE;
 	do
 	{
@@ -46,10 +33,10 @@ int read_number()
 int find_coprime(int euler_totient) 
 {
 	srand(time(NULL));
-	int coprime;
+	int coprime = 0;
 	do {
 		coprime = 2 + rand() % (euler_totient);
-	} while (great_common_divisor(euler_totient, coprime) != 1)); 
+	} while (great_common_divisor(euler_totient, coprime) != 1); 
 	return coprime;
 }
 
@@ -61,7 +48,8 @@ int great_common_divisor(int first_number, int second_number)
 		return great_common_divisor(second_number, first_number % second_number);
 }
 
-int find_modular_multiplicative_inverse(int coprime, int euler_totiente) {
+int find_modular_multiplicative_inverse(int coprime, int euler_totiente)
+{
 	int modular_inverse = 0;	
 	for (int i = 1; i < euler_totiente; i++) {
 		if ((i * coprime - 1) % euler_totiente == 0) {
@@ -72,7 +60,8 @@ int find_modular_multiplicative_inverse(int coprime, int euler_totiente) {
 	return modular_inverse;
 }
 
-void encrypt(char* pure_text, Public_Key key) {
+void encrypt(char* pure_text, Public_Key* key)
+{
 	for (int i = 0; pure_text[i]; i++) {
 		if (is_letter(pure_text[i]) == FALSE) continue;
 
@@ -81,7 +70,8 @@ void encrypt(char* pure_text, Public_Key key) {
 	printf("Encrypted text: %s\n\n", pure_text);
 }
 
-void decrypt(char* encrypted_text, Private_Key private_key, Public_Key public_key) {
+void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
+{
 	for (int i = 0; encrypted_text[i]; i++) {
 		if (is_letter(encrypted_text[i]) == FALSE) continue;
 		
