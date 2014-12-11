@@ -14,13 +14,26 @@ char *get_text(char *path)
 {
 	char *text;
 	long size = file_size(path);
-	text = malloc(size * (sizeof(char)));
+	text = (char*) malloc(size * (sizeof(char)));
 	FILE *target = fopen(path, "rb");
 	rewind(target);
 	fread(text, sizeof(char), size, target);
 	fclose(target);
 	return text;
 
+}
+
+Boolean export_text_to_file(char *text_input)
+{
+	Boolean is_exportation_worked_fine = FALSE;
+	FILE *standard_text_file = fopen("/text/exported.txt", "w");
+	fwrite(text_input, sizeof(text_input), 1, standard_text_file);
+	fclose(standard_text_file);
+	if(strcmp(get_text("/text/exported.txt"),text_input)==0)
+	{
+		is_exportation_worked_fine = TRUE;
+	}
+	return is_exportation_worked_fine;
 }
 
 /**
@@ -56,7 +69,7 @@ Esta função retorna uma cópia minúscula da string enviada como argumento, se
 char* tolow(char* string) 
 {
 	int i = 0;
-	char* aux = malloc(strlen(string) * sizeof(char));
+	char* aux = (char*) malloc(strlen(string) * sizeof(char));
 	while (string[i])
 	{
 		if (verify_if_uppercase(string[i]))
@@ -78,7 +91,12 @@ Esta função recebe como argumento um caracter e verifica se o mesmo é uma let
 */
 Boolean verify_if_uppercase(char letter)
 {
-	return letter >= 65 && letter <= 90;
+	Boolean is_in_uppercase = FALSE;
+	if(letter >= 65 && letter <= 90)
+	{
+		is_in_uppercase = TRUE;
+	}
+	return is_in_uppercase;
 }
 
 Boolean compare_strings(char *first, char *second)
@@ -131,11 +149,11 @@ char **get_dictionary()
 	else
 	{
 		long number_of_words = numberoflines(dictionary_file);
-		dictionary = malloc(number_of_words * sizeof(char*));
+		dictionary = (char**) malloc(number_of_words * sizeof(char*));
 		int i;
 		for(i = 0; i < number_of_words; i++)
 		{
-			dictionary[i] = malloc(MAX_WORD_LENGHT*sizeof(char));
+			dictionary[i] = (char*) malloc(MAX_WORD_LENGHT*sizeof(char));
 			fgets(dictionary[i], MAX_WORD_LENGHT, dictionary_file);
 			fix_word(dictionary[i]);
 		}
