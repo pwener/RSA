@@ -6,8 +6,11 @@
 #include "modulus.h"
 #include "msr.h"
 
+#define MAX_WORD_LENGHT 45
+
 char *get_text(char *path);
 long file_size(char *path);
-char **get_dicionary();
+char **get_dictionary();
+void fix_word(char *word);
 
 #endif
