@@ -2,11 +2,14 @@
 #define TEXT_H_
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include "algebra.h"
 
 #define MAX_WORD_LENGHT 45
 
 char *get_text(char *path);
 long file_size(char *path);
+Boolean compare_strings(char *first, char *second);
 int numberoflines(FILE *input_file);
 char **get_dictionary();
 void fix_word(char *word);

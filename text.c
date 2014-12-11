@@ -50,6 +50,52 @@ void fix_word(char *word)
 	}
 }
 
+char *str_upercase(char *string)
+{
+	char *result = string;
+	while (*string) *string = toupper(*(string++));
+	return result;
+}
+
+Boolean compare_strings(char *first, char *second)
+{
+	int length_first = strlen(first);
+	int length_second = strlen(second);
+	int compatibity = 0;
+	char *aux1, *aux2;
+	strcpy(aux1, first);
+	strcpy(aux2, second);
+	str_upercase(aux1);
+	Boolean isEquals;
+	if(length_first == length_second)
+	{
+		int i;
+		for(i = 0; i< length_first; i++)
+		{
+			if (aux1[i] == aux2)
+			{
+				compatibility++;
+			}
+		}
+		if(compatibility == length){
+			isEquals = TRUE;	
+		}
+	}
+	else if(((strstr(aux1, aux2) != NULL && length_first > 3) 
+			|| (strstr(aux2, aux1) != NULL && length_first > 3)) 
+			&& aux1[0] == aux2[0])
+	{
+		isEquals = TRUE;	
+	}
+	else
+	{
+		isEquals = FALSE;
+	}
+	free(aux1);
+	free(aux2);
+	return isEquals;
+}
+
 char **get_dictionary()
 {
 	FILE *dictionary_file = fopen("dicionario.pt.txt", "r");
