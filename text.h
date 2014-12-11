@@ -8,6 +8,7 @@
 #define MAX_WORD_LENGHT 45
 
 char *get_text(char *path);
+Boolean export_text_to_file(char *text_input);
 long file_size(char *path);
 void fix_word(char *word);
 char *tolow(char *string);
