@@ -9,9 +9,11 @@
 
 char *get_text(char *path);
 long file_size(char *path);
+void fix_word(char *word);
+char *tolow(char *string);
+Boolean verify_if_uppercase(char letter);
 Boolean compare_strings(char *first, char *second);
 int numberoflines(FILE *input_file);
 char **get_dictionary();
-void fix_word(char *word);
 
 #endif

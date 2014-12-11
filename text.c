@@ -50,34 +50,57 @@ void fix_word(char *word)
 	}
 }
 
-char *str_upercase(char *string)
+/*
+Esta função retorna uma cópia minúscula da string enviada como argumento, sem alterar o argumento.
+*/
+char* tolow(char* string) 
 {
-	char *result = string;
-	while (*string) *string = toupper(*(string++));
-	return result;
+	int i = 0;
+	char* aux = malloc(strlen(string) * sizeof(char));
+	while (string[i])
+	{
+		if (verify_if_uppercase(string[i]))
+		{
+			aux[i] = string[i] + 32;
+		}
+		else
+		{
+			aux[i] = string[i];
+		}
+		i++;
+	}
+	return aux;
+}
+
+
+/*
+Esta função recebe como argumento um caracter e verifica se o mesmo é uma letra maiúscula. Caso seja, retorna 1, se não, retorna 0.
+*/
+Boolean verify_if_uppercase(char letter)
+{
+	return letter >= 65 && letter <= 90;
 }
 
 Boolean compare_strings(char *first, char *second)
 {
 	int length_first = strlen(first);
 	int length_second = strlen(second);
-	int compatibity = 0;
+	int compatibility = 0;
 	char *aux1, *aux2;
-	strcpy(aux1, first);
-	strcpy(aux2, second);
-	str_upercase(aux1);
+	aux1 = tolow(first);
+	aux2 = tolow(second);
 	Boolean isEquals;
 	if(length_first == length_second)
 	{
 		int i;
 		for(i = 0; i< length_first; i++)
 		{
-			if (aux1[i] == aux2)
+			if (aux1[i] == aux2[i])
 			{
 				compatibility++;
 			}
 		}
-		if(compatibility == length){
+		if(compatibility == length_first){
 			isEquals = TRUE;	
 		}
 	}
