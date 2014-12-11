@@ -20,7 +20,8 @@ typedef enum Type_Option
 
 typedef enum Miller_Selfridge_Rabin_Option
 {
-	MSRCONTINUE,
+	MSRNONE,
+	MSRTEST,
 	MSRPREVIOUS
 }MSR_Opt;
 
@@ -29,15 +30,16 @@ typedef enum Text_Option
 	TXTNONE,
 	TXTFILE,
 	TXTUSER,
+	TXTSUCCESS,
 	TXTPREVIOUS
 }Text_Opt;
 
 typedef enum RSA_Option
 {
 	RSANONE,
-	RSAPRIME,
 	RSAENCRYPT,
 	RSADECRYPT,
+	RSAHACK,
 	RSAPREVIOUS
 }RSA_Opt;
 
@@ -53,6 +55,7 @@ typedef struct Options
 Options run_functions(Options previous_options);
 Options run_rsa_functions(Options previous_options);
 Options run_msr_functions(Options previous_options);
+Options run_test_primality(Options previous_options);
 
 Options get_standard_options_values();
 Options receive_type_option(Options previous_options);
@@ -60,12 +63,15 @@ Options receive_text_upload_option(Options previous_options);
 Options receive_text_by_file(Options previous_options);
 Options receive_text_by_user(Options previous_options);
 Options receive_rsa_option(Options previous_options);
+Options receive_msr_option(Options previous_options);
+
+Boolean check_possibly_prime_number(unsigned int possibly_prime_number);
 
 void print_authors();
 void print_institute();
 
 void clear_view();
-void press_any_key();
+void press_enter();
 void print_hline();
 void print_choose();
 void print_previous();
@@ -84,6 +90,8 @@ void inform_wrong_path();
 void inform_text_is_fine();
 
 void inform_rsa_option();
+
+void explain_miller_selfridge_rabin();
 
 void inform_unknown_error();
 

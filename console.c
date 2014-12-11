@@ -18,7 +18,7 @@ Options run_functions(Options previous_options)
 	{
 		inform_header();
 		inform_about();
-		press_any_key();
+		press_enter();
 		inform_type_option();
 		options = receive_type_option(options);
 	}
@@ -30,18 +30,15 @@ Options run_rsa_functions(Options previous_options)
 	Options options = previous_options;
 	if(options.rsa == RSAENCRYPT)
 	{
-		printf("OK0");
-		press_any_key();
+		run_encrypt_functions();
 	}
 	else if(options.rsa == RSADECRYPT)
 	{
-		printf("OK1");
-		press_any_key();
+		run_decrypt_functions();
 	}
-	else if(options.rsa == RSAPRIME)
+	else if(options.rsa == RSAHACK)
 	{
-		printf("OK2");
-		press_any_key();
+		run_hack_functions();
 	}
 	else if(options.rsa == RSANONE)
 	{
@@ -73,8 +70,8 @@ Options run_rsa_functions(Options previous_options)
 	}
 	else if(options.rsa == RSAPREVIOUS)
 	{
-		option.text == TXTNONE;
-		option.type == NONE;
+		options.text = TXTNONE;
+		options.rsa = RSANONE;
 	}
 	return options;
 }
@@ -82,7 +79,42 @@ Options run_rsa_functions(Options previous_options)
 Options run_msr_functions(Options previous_options)
 {
 	Options options = previous_options;
+	
+	if(options.msr == MSRTEST)
+	{
+		options = run_test_primality(options);
+	}
+	else if(options.msr == MSRNONE)
+	{
+		explain_miller_selfridge_rabin();
+		options = receive_msr_option(options);
+	}
+	else if(options.msr == MSRPREVIOUS)
+	{
+		options.msr = MSRNONE;
+		options.type = NONE;
+	}
 
+	return options;
+}
+
+Options run_test_primality(Options previous_options)
+{
+	Options options = previous_options;
+
+	unsigned int possibly_prime_number =  receive_number();
+	Boolean is_number_prime = check_possibly_prime_number(possibly_prime_number);
+	if(is_number_prime==TRUE)
+	{
+		inform_its_prime();
+	}
+	else if(is_number_prime==FALSE)
+	{
+		inform_its_composite();
+	}
+
+	options.msr = MSRNONE;
+	
 	return options;
 }
 
@@ -94,7 +126,7 @@ Options get_standard_options_values()
 	options.main = CONTINUE;
 	options.type = NONE;
 	options.text = TXTNONE;
-	options.msr = MSRPREVIOUS;
+	options.msr = MSRNONE;
 	options.rsa = RSANONE;
 	return options;
 }
@@ -168,7 +200,7 @@ Options receive_text_by_file(Options previous_options)
 	if(text_input==NULL)
 	{
 		inform_wrong_path();
-		press_any_key();
+		press_enter();
 	}
 	else
 	{
@@ -176,13 +208,13 @@ Options receive_text_by_file(Options previous_options)
 		if(is_exportation_worked_fine == TRUE)
 		{
 			inform_text_is_fine();
-			press_any_key();
+			press_enter();
 			options.text = TXTSUCCESS;
 		}
 		else if(is_exportation_worked_fine == FALSE)
 		{
 			inform_unknown_error();
-			press_any_key();
+			press_enter();
 		}
 	}
 	free(path_input);
@@ -199,15 +231,51 @@ Options receive_text_by_user(Options previous_options)
 	if(is_exportation_worked_fine == TRUE)
 	{
 		inform_text_is_fine();
-		press_any_key();
+		press_enter();
 		options.text = TXTSUCCESS;
 	}
 	else if(is_exportation_worked_fine == FALSE)
 	{
 		inform_unknown_error();
-		press_any_key();
+		press_enter();
 	}
 	return options;
+}
+
+Options receive_rsa_option(Options previous_options)
+{
+	Options options = previous_options;
+	int input = 10;
+	print_response_symbol();
+	scanf("%d", &input);
+	getchar();
+	switch(input)
+	{
+		case 1:
+			options.rsa = RSAENCRYPT;
+		break;
+
+		case 2:
+			options.rsa = RSADECRYPT;
+		break;
+
+		case 3:
+			options.rsa = RSAHACK;
+		break;
+
+		case 9:
+			options.rsa = RSAPREVIOUS;
+		break;
+
+		case 0:
+			options.main = QUIT;
+		break;
+
+		default:
+			options.rsa = RSANONE;
+		break;
+	}
+	return options;	
 }
 
 // Header Procedures
@@ -240,9 +308,9 @@ void clear_view()
 	printf("\n\n\n \n\n\n \n\n\n \n");
 }
 
-void press_any_key()
+void press_enter()
 {
-	printf("\t\t\tPress Any Key To Continue...\n");
+	printf("\t\t\tPress ENTER To Continue...\n");
 	getchar();
 	clear_view();
 }
@@ -338,6 +406,17 @@ void inform_wrong_path()
 void inform_text_is_fine()
 {
 	printf("[Yiikies!]\tThe text was succesfully imported!");
+	print_hline();
+}
+
+void inform_rsa_option(){
+	print_hline();
+	print_choose();
+	printf("\t[1] Encrypt the Text\n");
+	printf("\t[2] Decrypt the Text\n");
+	printf("\t[3] Try to Hack a Encrypted Text\n");
+	print_previous();
+	print_quit();
 	print_hline();
 }
 

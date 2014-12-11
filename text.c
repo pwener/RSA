@@ -37,7 +37,7 @@ Boolean export_text_to_file(char *text_input)
 	FILE *standard_text_file = fopen("text/exported.txt", "w");
 	fprintf(standard_text_file, "%s", text_input);
 	fclose(standard_text_file);
-	if(strcmp(get_text_by_file("text/exported.txt"),text_input)==0)
+	if(strcmp(get_text_by_file((char*)"text/exported.txt"),text_input)==0)
 	{
 		is_exportation_worked_fine = TRUE;
 	}
