@@ -1,8 +1,5 @@
 #include "msr.h"
-#include "modulus.h"
-#include "text.h"
 #include <time.h>
-
 
 typedef struct public_key {
 	int rsa_modulus;
@@ -26,7 +23,6 @@ void rsa(char* text, int first_prime, int second_prime)
 	public_key->coprime = coprime;
 	private_key->rsa_modulus = rsa_modulus;
 	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;		
-	
 }
 
 int read_number() 
@@ -73,20 +69,10 @@ int find_modular_multiplicative_inverse(int coprime, int euler_totiente) {
 }
 
 void encrypt(char* pure_text, Public_Key key) {
-	for (int i = 0; pure_text[i]; i++) {
-		if (is_letter(pure_text[i]) == FALSE) continue;
-
-		pure_text[i] = exponential_modulus(pure_text[i], key->coprime, key->rsa_modulus);				
-	}
-	printf("Encrypted text: %s\n\n", pure_text);
+	
 }
 
-void decrypt(char* encrypted_text, Private_Key private_key, Public_Key public_key) {
-	for (int i = 0; encrypted_text[i]; i++) {
-		if (is_letter(encrypted_text[i]) == FALSE) continue;
-		
-		encrypted_text[i] = exponential_modulus(encrypted_text[i], private_key->modular_multiplicative_inverse, public_key->rsa_modulus);
-	}
-	printf("Decrypted text: %s\n\n", encrypted_text);
+void decrypt(char* encrypted_text, Private_Key key) {
+	
 }
 
