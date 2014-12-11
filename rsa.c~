@@ -51,4 +51,3 @@ int modular_multiplicative_inverse(int coprime, int euler_totiente) {
 	return modular_inverse;
 }
 
-
