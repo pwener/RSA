@@ -114,6 +114,7 @@ Boolean is_letter(char letter) {
 	{
 		is_in_uppercase = TRUE;
 	}
+
 	return is_in_uppercase;
 }
 
