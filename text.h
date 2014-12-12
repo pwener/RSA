@@ -10,7 +10,7 @@
 char *get_text_by_file(char *path);
 char *receive_string_from_user(unsigned long long int text_size);
 Boolean export_text_to_file(char *text_input, char *path_input);
-long file_size(char *path);
+int file_size(char *path);
 void fix_word(char *word);
 char *tolow(char *string);
 Boolean verify_if_uppercase(char letter);

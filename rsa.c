@@ -70,7 +70,6 @@ char* encrypt(char* pure_text, Public_Key* key)
 		for (j = 0; aux[j]; j++)
 			encrypted_string[k++] = aux[j];
 	}
-	printf("K = %lld\n", k);
 	encrypted_string[k] = '\0';
 	printf("%s\n", encrypted_string);	
 

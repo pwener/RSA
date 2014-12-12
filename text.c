@@ -1,10 +1,10 @@
 #include "text.h"
 
-long file_size(char *path)
+int file_size(char *path)
 {
 	FILE *target = fopen(path, "r");
 	fseek(target, 0, SEEK_END);
-	long file_size = ftell(target);
+	int file_size = ftell(target);
 	fclose(target);
 	return file_size;
 }
@@ -13,10 +13,9 @@ long file_size(char *path)
 char *get_text_by_file(char *path)
 {
 	char *text;
-	long size = file_size(path);
+	int size = file_size(path);
 	text = (char*) malloc(size * (sizeof(char)));
 	FILE *target = fopen(path, "r");
-	rewind(target);
 	fread(text, sizeof(char), size, target);
 	fclose(target);
 	return text;

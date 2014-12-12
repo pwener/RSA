@@ -845,11 +845,14 @@ void explain_see_keys()
 
 void inform_keys_to_user()
 {
+	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 	print_hline();
 	printf("\n\t\t\t\tYOUR KEYS\n");
 	print_hline();
-	printf("\t\tPublic Key:\t%s\n", get_text_by_file((char*)"keys/public_key.txt"));
-	printf("\t\tPrivate Key:\t%s\n", get_text_by_file((char*)"keys/private_key.txt"));
+	printf("\t\tPublic Key:\t%lld %lld\n", pair_of_keys->public_key->rsa_modulus,
+		pair_of_keys->public_key->coprime);
+	printf("\t\tPrivate Key:\t%lld %lld\n", pair_of_keys->private_key->rsa_modulus,
+		pair_of_keys->private_key->modular_multiplicative_inverse);
 	print_hline();
 }
 
