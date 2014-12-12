@@ -43,7 +43,7 @@ Boolean export_text_to_file(char *text_input, char *path_input)
 /**
 * Returns the number of lines in an FILE
 */
-long long int numberoflines(FILE *input_file)
+int numberoflines(FILE *input_file)
 {
 	char s;
 	long long int number_of_lines = 0;
@@ -115,16 +115,16 @@ Boolean is_letter(char letter) {
 
 Boolean compare_strings(char *first, char *second)
 {
-	long long int length_first = strlen(first);
-	long long int length_second = strlen(second);
-	long long int compatibility = 0;
+	int length_first = strlen(first);
+	int length_second = strlen(second);
+	int compatibility = 0;
 	char *aux1, *aux2;
 	aux1 = tolow(first);
 	aux2 = tolow(second);
 	Boolean isEquals;
 	if(length_first == length_second)
 	{
-		long long int i;
+		int i;
 		for(i = 0; i< length_first; i++)
 		{
 			if (aux1[i] == aux2[i])
@@ -136,9 +136,9 @@ Boolean compare_strings(char *first, char *second)
 			isEquals = TRUE;	
 		}
 	}
-	else if(((strstr(aux1, aux2) != NULL && length_first > 3) 
-			|| (strstr(aux2, aux1) != NULL && length_first > 3)) 
-			&& aux1[0] == aux2[0])
+	else if((strstr(aux1, aux2) != NULL && length_second > 3) 
+			|| (strstr(aux2, aux1) != NULL && length_first > 3)
+			&& (aux1[0] == aux2[0]))
 	{
 		isEquals = TRUE;	
 	}

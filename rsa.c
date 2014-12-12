@@ -107,24 +107,27 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 {
 	char** dictionary = get_dictionary();
 	Boolean found = FALSE;	
-	long long int key;
+	long long int key = 0;
 	int frequency_of_success = 0;
 	int number_of_words = 0;
-	char delimiters[7] = " .,!?\"'";
+	float quantity_of_words = strlen(encrypted_text)/get_magnitude(public_key->rsa_modulus)+1;
+	char delimiters[8] = " .,!?\"'";
 	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
-	//char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus)];
-	char* decrypted_text = (char*) malloc((strlen(encrypted_text)/get_magnitude(public_key->rsa_modulus)+1)*sizeof(char));
+	char* decrypted_text = (char*) malloc(quantity_of_words*sizeof(char));
+	char* aux = (char*) malloc(quantity_of_words*sizeof(char));
 	char* token;
 	char* tokens[2000];
+	int dicionary_lines = numberoflines(fopen("dicionario.pt.txt", "r"));
+	Private_Key *private_key = (Private_Key*) malloc(sizeof(Private_Key));
+	private_key->rsa_modulus = public_key->rsa_modulus;
 	while(!found)
 	{
 		printf("Tentando a chave>> %lld\n", key);
 		//Descriptografa o texto
-		Private_Key *private_key = (Private_Key*) malloc(sizeof(Private_Key));
-		private_key->rsa_modulus = public_key->rsa_modulus;
 		private_key->modular_multiplicative_inverse = key;
 		decrypted_text = decrypt(encrypted_text, private_key, public_key);
 		number_of_words = 0;
+		strcpy(aux, decrypted_text);
 		token = strtok(decrypted_text, delimiters);
 		while (token != NULL)
 		{
@@ -132,22 +135,25 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 			token = strtok(NULL, delimiters);
 		}
 		int i, j;
-		long dicionary_lines = numberoflines(fopen("dicionario.pt.txt", "r"));
 		for (i = 0; i < number_of_words; i++)
 		{
 				for (j = 0; j < dicionary_lines; j++) 
-				{
+				{		
+						if(strlen(tokens[i]) > MAX_WORD_LENGHT){
+							break;
+						}
 						if (compare_strings(tokens[i], dictionary[j]))
 						{
 							frequency_of_success++;
 							break;
 						}
 				}
-				if ((float) frequency_of_success >= 0.8 * number_of_words) 
+
+				if (frequency_of_success >= 0.8 * number_of_words) 
 				{
 							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
 							printf("\n\n CHAVE ENCONTRADA: %lld\n\n", key);
-							printf("MSG>> %s\n", decrypted_text);					
+							printf("MSG>> %s\n", aux);				
 							found = TRUE;
 							break;
 				}

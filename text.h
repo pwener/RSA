@@ -16,7 +16,7 @@ char *tolow(char *string);
 Boolean verify_if_uppercase(char letter);
 Boolean is_letter(char letter);
 Boolean compare_strings(char *first, char *second);
-long long int numberoflines(FILE *input_file);
+int numberoflines(FILE *input_file);
 char **get_dictionary();
 
 #endif
