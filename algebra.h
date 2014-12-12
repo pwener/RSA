@@ -13,18 +13,18 @@ typedef enum Boolean
 
 typedef struct Two_Natural_Numbers
 {
-	unsigned int first_number;
-	unsigned int second_number;
+	unsigned long long int first_number;
+	unsigned long long int second_number;
 }Two_Natural_Numbers;
 
-Boolean is_odd(int input_number);
-Boolean is_negative(int input_number);
-Boolean is_divisible(int numerator_number, int denominator_number);
+Boolean is_odd(long long int input_number);
+Boolean is_negative(long long int input_number);
+Boolean is_divisible(long long int numerator_number, long long int denominator_number);
 
-unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number);
+unsigned long long int random_natural_number(unsigned long long int minimum_number, unsigned long long int maximum_number);
 
-Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number);
+Two_Natural_Numbers decompose_as_power_of_two(unsigned long long int input_number);
 
-int get_magnitude(int input_number);
+long long int get_magnitude(long long int input_number);
 
 #endif // ALGEBRA_H_

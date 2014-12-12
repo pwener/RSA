@@ -9,9 +9,9 @@
  *	@param modulus_number (n)
  *	@return output_number (r) a positive number
  */
-unsigned int modulus(int input_number, unsigned int modulus_number)
+unsigned long long int modulus(long long int input_number, unsigned long long int modulus_number)
 {
-	unsigned int output_number = 0;
+	unsigned long long int output_number = 0;
 	if(is_negative(input_number)==TRUE)
 	{
 		output_number = (input_number % modulus_number) + input_number;
@@ -23,10 +23,10 @@ unsigned int modulus(int input_number, unsigned int modulus_number)
 	return output_number;
 }
 
-unsigned int exponential_modulus(int base, int exponant, int modulus_number){
-	unsigned int result = 0;
+unsigned long long int exponential_modulus(long long int base, long long int exponant, long long int modulus_number){
+	unsigned long long int result = 0;
 	result = modulus(base, modulus_number);
-	int count = 1;
+	long long int count = 1;
 	while(count < exponant)
 	{
 		if(result > modulus_number)
@@ -51,7 +51,7 @@ unsigned int exponential_modulus(int base, int exponant, int modulus_number){
  *	@param modulus_number (n)
  *	@return TRUE if is congruent or False if is not congruent
  */
-Boolean is_congruent(int a_number, int b_number, unsigned int modulus_number)
+Boolean is_congruent(long long int a_number, long long int b_number, unsigned long long int modulus_number)
 {
 	Boolean is_congruent = is_divisible((a_number - b_number), modulus_number);
 	return is_congruent;
@@ -63,10 +63,10 @@ Boolean is_congruent(int a_number, int b_number, unsigned int modulus_number)
  *	@param input_number (x)
  *	@return phi (n)
  */
-unsigned int euler_totient(unsigned int input_number)
+unsigned long long int euler_totient(unsigned long long int input_number)
 {
-	unsigned int associated_number = 1;
-	unsigned int phi = 0;
+	unsigned long long int associated_number = 1;
+	unsigned long long int phi = 0;
 	while(associated_number < input_number)
 	{
 		if(is_divisible(input_number, input_number) == FALSE)

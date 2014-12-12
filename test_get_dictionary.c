@@ -6,7 +6,7 @@ int main(){
 	long n = numberoflines(arquivo);
 	fclose(arquivo);
 	printf("\nNumber of lines>> %ld\n", n);
-	int i;
+	long long int i;
 	for(i = 0; i < n ; i++){
 		printf("%s;", dictionary[i]);
 	}

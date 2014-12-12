@@ -6,7 +6,7 @@
 void test_is_odd()
 {
 	printf("---> Teste da funcao is_odd \n");
-	int i;
+	long long int i;
 	for(i = 1; i < 10; i++)
 	{
 		if(is_odd(i) == TRUE)

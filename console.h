@@ -94,7 +94,7 @@ Options receive_key_option(Options previous_options);
 Options receive_see_keys_option(Options previous_options);
 Options receive_msr_option(Options previous_options);
 
-unsigned int receive_number_from_user();
+unsigned long long int receive_number_from_user();
 Two_Natural_Numbers receive_prime_numbers();
 Pair_of_Keys* get_pair_of_keys();
 
@@ -138,8 +138,8 @@ void inform_result_hack();
 
 void explain_miller_selfridge_rabin();
 void inform_number_to_check_primality();
-void inform_its_prime(unsigned int prime_number);
-void inform_its_composite(unsigned int composite_number);
+void inform_its_prime(unsigned long long int prime_number);
+void inform_its_composite(unsigned long long int composite_number);
 
 void inform_unknown_error();
 

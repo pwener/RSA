@@ -3,7 +3,7 @@
 /*
 *	return TRUE if possible_prime is prime
 */
-Boolean test_primality_msr(unsigned int possible_prime)
+Boolean test_primality_msr(unsigned long long int possible_prime)
 {
 	Boolean is_prime = FALSE;
 	if(is_odd(possible_prime) == TRUE)
@@ -22,10 +22,10 @@ Boolean test_primality_msr(unsigned int possible_prime)
 Boolean havent_witness(MSR msr)
 {
 	Boolean havent_witness = FALSE;
-	int result = 0;
-	unsigned int exponant_reference = 0;
-	unsigned int exponant = 0;
-	unsigned int exponant_multiplier = 1;
+	long long int result = 0;
+	unsigned long long int exponant_reference = 0;
+	unsigned long long int exponant = 0;
+	unsigned long long int exponant_multiplier = 1;
 	for(exponant_reference = 0; exponant_reference < msr.t ; exponant_reference++)
 	{
 		exponant = (pow(2, exponant_reference)) * msr.m;

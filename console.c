@@ -227,6 +227,22 @@ Options run_encrypt_functions(Options previous_options)
 
 	char *text_encrypted = encrypt(text_reference,pair_of_keys->public_key);
 
+	Boolean is_exportation_worked_fine = export_text_to_file(text_encrypted,
+		(char*)"messages/encrypted.txt");
+	if(is_exportation_worked_fine == TRUE)
+	{
+		inform_text_is_fine();
+		press_enter();
+	}
+	else if(is_exportation_worked_fine == FALSE)
+	{
+		inform_unknown_error();
+		press_enter();
+	}
+
+	free(text_reference);
+	free(text_encrypted);
+
 	options.rsa = RSANONE;
 
 	return options;
@@ -239,8 +255,23 @@ Options run_decrypt_functions(Options previous_options)
 
 	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 
-	char *text_encrypted = decrypt(text_reference,pair_of_keys->private_key,pair_of_keys->public_key);
+	char *text_decrypted = decrypt(text_reference,pair_of_keys->private_key,pair_of_keys->public_key);
 
+	Boolean is_exportation_worked_fine = export_text_to_file(text_decrypted,
+		(char*)"messages/decrypted.txt");
+	if(is_exportation_worked_fine == TRUE)
+	{
+		inform_text_is_fine();
+		press_enter();
+	}
+	else if(is_exportation_worked_fine == FALSE)
+	{
+		inform_unknown_error();
+		press_enter();
+	}
+
+	free(text_reference);
+	free(text_decrypted);
 	options.rsa = RSANONE;
 	return options;
 }
@@ -345,7 +376,7 @@ Options receive_text_by_file(Options previous_options)
 	}
 	else
 	{
-		Boolean is_exportation_worked_fine = export_text_to_file(text_input);
+		Boolean is_exportation_worked_fine = export_text_to_file(text_input,(char*)"text/exported.txt");
 		if(is_exportation_worked_fine == TRUE)
 		{
 			inform_text_is_fine();
@@ -356,6 +387,7 @@ Options receive_text_by_file(Options previous_options)
 		{
 			inform_unknown_error();
 			press_enter();
+			options.text = TXTNONE;
 		}
 	}
 	free(path_input);
@@ -368,7 +400,7 @@ Options receive_text_by_user(Options previous_options)
 	Options options = previous_options;
 	print_response_symbol();
 	char* text_input = receive_string_from_user(500);
-	Boolean is_exportation_worked_fine = export_text_to_file(text_input);
+	Boolean is_exportation_worked_fine = export_text_to_file(text_input,(char*)"text/exported.txt");
 	if(is_exportation_worked_fine == TRUE)
 	{
 		inform_text_is_fine();
@@ -525,11 +557,11 @@ Options receive_msr_option(Options previous_options)
 	return options;	
 }
 
-unsigned int receive_number_from_user()
+unsigned long long int receive_number_from_user()
 {
-	unsigned int input = 1;
+	unsigned long long int input = 1;
 	print_response_symbol();
-	scanf("%d", &input);
+	scanf("%lld", &input);
 	getchar();
 	return input;
 }
@@ -569,18 +601,29 @@ Two_Natural_Numbers receive_prime_numbers()
 
 Pair_of_Keys* get_pair_of_keys()
 {
+	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
+	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
+
+	long long int rsa_modulus = 0;
+	long long int coprime = 0;
+	long long int modular_multiplicative_inverse = 0;
+
+	FILE *public_key_file = fopen("keys/public_key.txt", "r");
+	fscanf(public_key_file, "%lld %lld", &rsa_modulus, &coprime);
+	fclose(public_key_file);
+
+	FILE *private_key_file = fopen("keys/private_key.txt", "r");
+	fscanf(private_key_file, "%lld %lld", &rsa_modulus, &modular_multiplicative_inverse);
+	fclose(private_key_file);
+
+	public_key->rsa_modulus = rsa_modulus;
+	public_key->coprime = coprime;
+	private_key->rsa_modulus = rsa_modulus;
+	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;
+
 	Pair_of_Keys* pair_of_keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
-
-	FILE* standard_public_key_file = fopen("keys/public_key.txt", "r");
-	fscanf(standard_public_key_file, "%d %d",
-		pair_of_keys->public_key->rsa_modulus, pair_of_keys->public_key->coprime);
-	fclose(standard_public_key_file);
-
-	FILE* standard_private_key_file = fopen("keys/private_key.txt", "r");
-	fscanf(standard_private_key_file, "%d %d",
-		pair_of_keys->private_key->rsa_modulus,
-		pair_of_keys->private_key->modular_multiplicative_inverse);
-	fclose(standard_private_key_file);
+	pair_of_keys->public_key = public_key;
+	pair_of_keys->private_key = private_key;
 
 	return pair_of_keys;
 }
@@ -589,12 +632,12 @@ Pair_of_Keys* get_pair_of_keys()
 void export_keys_to_file(Pair_of_Keys* pair_of_keys)
 {
 	FILE *standard_public_key_file = fopen("keys/public_key.txt", "w");
-	fprintf(standard_public_key_file, "%d %d",
+	fprintf(standard_public_key_file, "%lld %lld",
 		pair_of_keys->public_key->rsa_modulus, pair_of_keys->public_key->coprime);
 	fclose(standard_public_key_file);
 
 	FILE *standard_private_key_file = fopen("keys/private_key.txt", "w");
-	fprintf(standard_private_key_file, "%d %d",
+	fprintf(standard_private_key_file, "%lld %lld",
 		pair_of_keys->private_key->rsa_modulus,
 		pair_of_keys->private_key->modular_multiplicative_inverse);
 	fclose(standard_private_key_file);
@@ -727,7 +770,7 @@ void inform_wrong_path()
 
 void inform_text_is_fine()
 {
-	printf("\t\t\n[Yiikies!]\tThe text was succesfully imported!");
+	printf("\n\t\t[Yiikies!]\tThe text was succesfully imported!");
 	print_hline();
 }
 
@@ -882,15 +925,15 @@ void inform_number_to_check_primality()
 	printf("Example: 8123 (it's prime), 9327 (it's composite)\n");
 }
 
-void inform_its_prime(unsigned int prime_number)
+void inform_its_prime(unsigned long long int prime_number)
 {
-	printf("\n->\tThe Number [%d] is Prime!\n", prime_number);
+	printf("\n->\tThe Number [%lld] is Prime!\n", prime_number);
 	print_hline();
 }
 
-void inform_its_composite(unsigned int composite_number)
+void inform_its_composite(unsigned long long int composite_number)
 {
-	printf("\n->\tThe Number [%d] is Composite!\n", composite_number);
+	printf("\n->\tThe Number [%lld] is Composite!\n", composite_number);
 	print_hline();
 }
 

@@ -3,9 +3,9 @@
 #include "text.h"
 
 int main(){
-	long size = file_size("textoExemplo.txt");
+	int size = file_size("textoExemplo.txt");
 	char * texto = malloc(size * sizeof(char));
 	texto = get_text("textoExemplo.txt");
-	printf("%s\n", texto);
+	print intf("%s\n", texto);
 	return 0;
 }

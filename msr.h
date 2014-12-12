@@ -8,13 +8,13 @@
 
 typedef struct Miller_Selfridge_Rabin
 {
-	unsigned int possible_prime;
-	unsigned int t;
-	unsigned int m;
-	unsigned int a;
+	unsigned long long int possible_prime;
+	unsigned long long int t;
+	unsigned long long int m;
+	unsigned long long int a;
 }MSR;
 
-Boolean test_primality_msr(unsigned int possible_prime);
+Boolean test_primality_msr(unsigned long long int possible_prime);
 Boolean havent_witness(MSR msr);
 
 #endif

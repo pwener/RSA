@@ -23,7 +23,7 @@ char *get_text_by_file(char *path)
 
 }
 
-char *receive_string_from_user(unsigned int text_size)
+char *receive_string_from_user(unsigned long long int text_size)
 {
 	char* text_input = (char*) malloc(text_size*(sizeof(char)));
 	fgets(text_input, text_size, stdin);
@@ -31,13 +31,13 @@ char *receive_string_from_user(unsigned int text_size)
 	return text_input;
 }
 
-Boolean export_text_to_file(char *text_input)
+Boolean export_text_to_file(char *text_input, char *path_input)
 {
 	Boolean is_exportation_worked_fine = FALSE;
-	FILE *standard_text_file = fopen("text/exported.txt", "w");
+	FILE *standard_text_file = fopen(path_input, "w");
 	fprintf(standard_text_file, "%s", text_input);
 	fclose(standard_text_file);
-	if(strcmp(get_text_by_file((char*)"text/exported.txt"),text_input)==0)
+	if(strcmp(get_text_by_file(path_input),text_input)==0)
 	{
 		is_exportation_worked_fine = TRUE;
 	}
@@ -47,10 +47,10 @@ Boolean export_text_to_file(char *text_input)
 /**
 * Returns the number of lines in an FILE
 */
-int numberoflines(FILE *input_file)
+long long int numberoflines(FILE *input_file)
 {
 	char s;
-	int number_of_lines = 0;
+	long long int number_of_lines = 0;
 	while((s = fgetc(input_file)) != EOF){
 		if(s == '\n')
 			number_of_lines++;
@@ -61,7 +61,7 @@ int numberoflines(FILE *input_file)
 
 void fix_word(char *word)
 {
-	int i = 0;	
+	long long int i = 0;	
 	while(1){
 		if (word[i] == '\n' || word[i] == '\0') {
 			word[i] = '\0';
@@ -76,7 +76,7 @@ Esta função retorna uma cópia minúscula da string enviada como argumento, se
 */
 char* tolow(char* string) 
 {
-	int i = 0;
+	long long int i = 0;
 	char* aux = (char*) malloc(strlen(string) * sizeof(char));
 	while (string[i])
 	{
@@ -119,16 +119,16 @@ Boolean is_letter(char letter) {
 
 Boolean compare_strings(char *first, char *second)
 {
-	int length_first = strlen(first);
-	int length_second = strlen(second);
-	int compatibility = 0;
+	long long int length_first = strlen(first);
+	long long int length_second = strlen(second);
+	long long int compatibility = 0;
 	char *aux1, *aux2;
 	aux1 = tolow(first);
 	aux2 = tolow(second);
 	Boolean isEquals;
 	if(length_first == length_second)
 	{
-		int i;
+		long long int i;
 		for(i = 0; i< length_first; i++)
 		{
 			if (aux1[i] == aux2[i])
@@ -168,7 +168,7 @@ char **get_dictionary()
 	{
 		long number_of_words = numberoflines(dictionary_file);
 		dictionary = (char**) malloc(number_of_words * sizeof(char*));
-		int i;
+		long long int i;
 		for(i = 0; i < number_of_words; i++)
 		{
 			dictionary[i] = (char*) malloc(MAX_WORD_LENGHT*sizeof(char));

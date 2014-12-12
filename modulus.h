@@ -3,12 +3,12 @@
 
 #include "algebra.h"
 
-unsigned int modulus(int input_number, unsigned int modulus_number);
+unsigned long long int modulus(long long int input_number, unsigned long long int modulus_number);
 
-unsigned int exponential_modulus(int base, int exponant, int modulus_number);
+unsigned long long int exponential_modulus(long long int base, long long int exponant, long long int modulus_number);
 
-Boolean is_congruent(int a_number, int b_number, unsigned int modulus_number);
+Boolean is_congruent(long long int a_number, long long int b_number, unsigned long long int modulus_number);
 
-unsigned int euler_totient(unsigned int input_number);
+unsigned long long int euler_totient(unsigned long long int input_number);
 
 #endif // MODULUS_H_
