@@ -5,7 +5,11 @@ Pair_of_Keys* generate_keys(int first_prime, int second_prime)
 {
 	int rsa_modulus = first_prime * second_prime;
 	int euler_totient = (first_prime - 1) * (second_prime - 1);
+<<<<<<< HEAD
 	int coprime = find_coprime(euler_totient);
+=======
+	int coprime = 17;//find_coprime(euler_totient);
+>>>>>>> Sistema de encriptacao e decriptacao
 	int modular_multiplicative_inverse = find_modular_multiplicative_inverse(coprime, euler_totient);		
 	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
 	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
@@ -55,7 +59,11 @@ char* encrypt(char* pure_text, Public_Key* key)
 	int i, j, k;
 	for (i = 0; pure_text[i]; i++);
 	int* encrypted_values = (int*) malloc(i * sizeof(int));	
+<<<<<<< HEAD
 	int modulus_size = get_magnitude(key->rsa_modulus);
+=======
+	int modulus_size = integer_size(key->rsa_modulus);
+>>>>>>> Sistema de encriptacao e decriptacao
 	char* encrypted_string = (char*) malloc(modulus_size * strlen(pure_text) * sizeof(char));  
 	char* aux = (char*) malloc(modulus_size * sizeof(char));
 	for (i = 0; pure_text[i]; i++) {
@@ -64,7 +72,11 @@ char* encrypt(char* pure_text, Public_Key* key)
 	}
 	
 	for (i = 0, k = 0; pure_text[i]; i++) {
+<<<<<<< HEAD
 		for (j = modulus_size; j > get_magnitude(encrypted_values[i]); j--)
+=======
+		for (j = modulus_size; j > integer_size(encrypted_values[i]); j--)
+>>>>>>> Sistema de encriptacao e decriptacao
 			encrypted_string[k++] = '0';
 		sprintf(aux, "%d", encrypted_values[i]);
 
@@ -83,7 +95,11 @@ char* encrypt(char* pure_text, Public_Key* key)
 char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
 {
 	int i = 0, j = 0, k = 0, l = 0;
+<<<<<<< HEAD
 	int magnitude = get_magnitude(public_key->rsa_modulus);
+=======
+	int magnitude = integer_size(public_key->rsa_modulus);
+>>>>>>> Sistema de encriptacao e decriptacao
 	int length = (strlen(encrypted_text)) / magnitude;
 	char* decrypted_text = (char*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(char));
 	int* decrypted_values = (int*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(int));
@@ -111,6 +127,7 @@ char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public
 	return decrypted_text;
 }
 
+<<<<<<< HEAD
 void brute_force(char* encrypted_text, Public_Key* public_key)
 {
 	char** dictionary = get_dictionary();
@@ -158,3 +175,16 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 		}
 	}
 }
+=======
+int integer_size(int number)
+{
+	int i = 1, counter = 0;
+	while (number / i != 0) {
+		counter++;
+		i *= 10;
+	}
+	return counter; 
+}
+
+
+>>>>>>> Sistema de encriptacao e decriptacao
