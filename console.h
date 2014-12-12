@@ -96,6 +96,7 @@ Options receive_msr_option(Options previous_options);
 
 unsigned int receive_number_from_user();
 Two_Natural_Numbers receive_prime_numbers();
+Pair_of_Keys* get_pair_of_keys();
 
 void export_keys_to_file(Pair_of_Keys* pair_of_keys);
 

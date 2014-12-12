@@ -211,7 +211,7 @@ Options run_see_key(Options previous_options)
 	inform_keys_to_user();
 
 	press_enter();
-	
+
 	options.see_key = SKPREVIOUS;
 
 	return options;
@@ -223,9 +223,12 @@ Options run_encrypt_functions(Options previous_options)
 	Options options = previous_options;
 	char *text_reference = get_text_by_file((char*)"text/exported.txt");
 
-	// TODO
+	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 
-	options = get_standard_options_values();
+	char *text_encrypted = encrypt(text_reference,pair_of_keys->public_key);
+
+	options.rsa = RSANONE;
+
 	return options;
 }
 
@@ -234,9 +237,11 @@ Options run_decrypt_functions(Options previous_options)
 	Options options = previous_options;
 	char *text_reference = get_text_by_file((char*)"text/exported.txt");
 
-	// TODO
+	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 
-	options = get_standard_options_values();
+	char *text_encrypted = decrypt(text_reference,pair_of_keys->private_key,pair_of_keys->public_key);
+
+	options.rsa = RSANONE;
 	return options;
 }
 
@@ -561,6 +566,25 @@ Two_Natural_Numbers receive_prime_numbers()
 
 	return prime_numbers;
 }
+
+Pair_of_Keys* get_pair_of_keys()
+{
+	Pair_of_Keys* pair_of_keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
+
+	FILE* standard_public_key_file = fopen("keys/public_key.txt", "r");
+	fscanf(standard_public_key_file, "%d %d",
+		pair_of_keys->public_key->rsa_modulus, pair_of_keys->public_key->coprime);
+	fclose(standard_public_key_file);
+
+	FILE* standard_private_key_file = fopen("keys/private_key.txt", "r");
+	fscanf(standard_private_key_file, "%d %d",
+		pair_of_keys->private_key->rsa_modulus,
+		pair_of_keys->private_key->modular_multiplicative_inverse);
+	fclose(standard_private_key_file);
+
+	return pair_of_keys;
+}
+
 
 void export_keys_to_file(Pair_of_Keys* pair_of_keys)
 {
