@@ -113,21 +113,24 @@ char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public
 
 void brute_force(char* encrypted_text, Public_Key* public_key)
 {
-/*	char** dictionary = get_dictionary();
+	char** dictionary = get_dictionary();
 	Boolean found = FALSE;	
 	unsigned int key;
 	int frequency_of_success = 0;
 	int number_of_words = 0;
 	char delimiters[8] = " .,!?\"'";
 	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
-	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus))];
+	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus)];
 	char* token;
 	char* tokens[2000];
 	while(!found)
 	{
 		printf("Tentando a chave>> %d\n", key);
 		//Descriptografa o texto
-		//decrypt(encrypted_text, key, public_key);
+		Private_Key *private_key = (Private_Key*) malloc(sizeof(Private_Key));
+		private_key->rsa_modulus = public_key->rsa_modulus;
+		private_key->modular_multiplicative_inverse = key;
+		decrypt(encrypted_text, private_key, public_key);
 		strcpy(aux, encrypted_text);
 		number_of_words = 0;
 		token = strtok(aux, delimiters);
@@ -137,7 +140,8 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 				token = strtok(NULL, delimiters);
 		}
 		int i, j;
-		long dicionary_lines = numberoflines(dictionary_file);
+		
+		long dicionary_lines = numberoflines(fopen("dicionario.pt.txt", "r"));
 		for (i = 0; i < number_of_words; i++)
 		{
 				for (j = 0; j < dicionary_lines; j++) 
@@ -151,10 +155,10 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 				if ((float) frequency_of_success >= 0.8 * number_of_words) 
 				{
 							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
-							printf("\n\n CHAVE ENCONTRADA: %s\n\n", key);					
-							found = true;
+							printf("\n\n CHAVE ENCONTRADA: %d\n\n", key);					
+							found = TRUE;
 							break;
 				}
 		}
-	}*/
+	}
 }
