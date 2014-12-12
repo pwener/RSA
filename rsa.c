@@ -5,7 +5,7 @@ Pair_of_Keys* generate_keys(int first_prime, int second_prime)
 {
 	int rsa_modulus = first_prime * second_prime;
 	int euler_totient = (first_prime - 1) * (second_prime - 1);
-	int coprime = 17;//find_coprime(euler_totient);
+	int coprime = find_coprime(euler_totient);
 	int modular_multiplicative_inverse = find_modular_multiplicative_inverse(coprime, euler_totient);		
 	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
 	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
@@ -64,32 +64,51 @@ char* encrypt(char* pure_text, Public_Key* key)
 	}
 	
 	for (i = 0, k = 0; pure_text[i]; i++) {
-		printf("\nok\n");
 		for (j = modulus_size; j > get_magnitude(encrypted_values[i]); j--)
 			encrypted_string[k++] = '0';
 		sprintf(aux, "%d", encrypted_values[i]);
 
 		for (j = 0; aux[j]; j++)
 			encrypted_string[k++] = aux[j];
-	
 	}
-	encrypted_string[k++] = '\0';
-	//printf("%s\n", encrypted_string);
+	printf("K = %d\n", k);
+	encrypted_string[k] = '\0';
+	printf("%s\n", encrypted_string);	
+
 	free(aux);
 	free(encrypted_values);		
 	return encrypted_string;
 }
 
-void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
+char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
 {
-	int i;
-	printf("\n\n\npri_key->rsa_modular = %d\tpub_key->modular_inverse = %d\n\n", public_key->rsa_modulus, private_key->modular_multiplicative_inverse);
-	for (i = 0; encrypted_text[i]; i++) {
-		if (is_letter(encrypted_text[i]) == FALSE) continue;
-		printf("encrypted_text[%d] = %c\n", i, encrypted_text[i]);
-		encrypted_text[i] = exponential_modulus(encrypted_text[i], private_key->modular_multiplicative_inverse, public_key->rsa_modulus);
+	int i = 0, j = 0, k = 0, l = 0;
+	int magnitude = get_magnitude(public_key->rsa_modulus);
+	int length = (strlen(encrypted_text)) / magnitude;
+	char* decrypted_text = (char*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(char));
+	int* decrypted_values = (int*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(int));
+	char* aux = (char*) malloc((magnitude + 1) * sizeof(char));
+	aux[magnitude] = '\0';
+	decrypted_text[strlen(encrypted_text) / magnitude] = '\0';
+
+	for (i = 0; encrypted_text[i]; i += magnitude) {
+		k = 0;
+		for (j = i; j < (i + magnitude); j++)
+			aux[k++] = encrypted_text[j];
+		decrypted_values[l++] = atoi(aux);
+		printf("%d\n", decrypted_values[l - 1]);	
 	}
-	printf("Decrypted text: %s\n\n", encrypted_text);
+	printf("l = %d\n", l);
+	for (i = 0; i < l; i++) {
+		printf("decrypted_values[%d] = %d\n", i, decrypted_values[i]);
+		decrypted_text[i] = exponential_modulus(decrypted_values[i], private_key->modular_multiplicative_inverse, public_key->rsa_modulus);
+		printf("decrypted_text[%d] = %c\n", i, decrypted_text[i]);	
+	}
+	decrypted_text[i] = '\0';
+	free(aux);
+	free(decrypted_values);
+	printf("Decrypted text: %s\n\n", decrypted_text);
+	return decrypted_text;
 }
 
 void brute_force(char* encrypted_text, Public_Key* public_key)
