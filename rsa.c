@@ -22,9 +22,9 @@ Pair_of_Keys* generate_keys(long long int first_prime, long long int second_prim
 long long int find_coprime(long long int euler_totient) 
 {
 	srand(time(NULL));
-	long long int coprime = 0;
+	long long int coprime = 2;
 	do {
-		coprime = 2 + rand() % (euler_totient);
+		coprime++;
 	} while (great_common_divisor(euler_totient, coprime) != 1); 
 	return coprime;
 }

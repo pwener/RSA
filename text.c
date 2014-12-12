@@ -36,10 +36,7 @@ Boolean export_text_to_file(char *text_input, char *path_input)
 	FILE *standard_text_file = fopen(path_input, "w");
 	fprintf(standard_text_file, "%s", text_input);
 	fclose(standard_text_file);
-	if(strcmp(get_text_by_file(path_input),text_input)==0)
-	{
-		is_exportation_worked_fine = TRUE;
-	}
+	is_exportation_worked_fine = TRUE;
 	return is_exportation_worked_fine;
 }
 
