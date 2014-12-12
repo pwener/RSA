@@ -28,7 +28,15 @@ Options run_functions(Options previous_options)
 Options run_rsa_functions(Options previous_options)
 {
 	Options options = previous_options;
-	if(options.rsa == RSAENCRYPT)
+	if(options.rsa == RSAGENKEYS)
+	{
+		options = run_key_functions(options);
+	}
+	else if(options.rsa == RSASEEKEYS)
+	{
+		options = run_see_keys_functions(options);
+	}
+	else if(options.rsa == RSAENCRYPT)
 	{
 		options = run_encrypt_functions(options);
 	}
@@ -101,7 +109,7 @@ Options run_msr_functions(Options previous_options)
 Options run_test_primality(Options previous_options)
 {
 	Options options = previous_options;
-	inform_number_desirable();
+	inform_number_to_check_primality();
 	unsigned int possibly_prime_number = receive_number_from_user();
 	Boolean is_number_prime = test_primality_msr(possibly_prime_number);
 
@@ -121,10 +129,82 @@ Options run_test_primality(Options previous_options)
 	return options;
 }
 
+Options run_key_functions(Options previous_options)
+{
+	Options options = previous_options;
+
+	if(options.gen_key == GKGEN)
+	{
+		options = run_generate_key(options);
+	}
+	else if(options.gen_key == GKNONE)
+	{
+		explain_key_generation();
+		options = receive_key_option(options);
+	}
+	else if(options.gen_key == GKPREVIOUS)
+	{
+		options.gen_key = GKNONE;
+		options.rsa = RSANONE;
+	}
+
+	return options;
+}
+
+Options run_generate_key(Options previous_options)
+{
+	Options options = previous_options;
+
+	Two_Natural_Numbers prime_numbers = receive_prime_numbers();
+	Pair_Of_Keys pair_of_keys = generate_keys(prime_numbers.first, primer_numbers.second);
+
+	export_keys_to_file(pair_of_keys);
+
+	options.gen_key = GKPREVIOUS;
+
+	return options;
+}
+
+
+Options run_see_keys_functions(Options previous_options)
+{
+	Options options = previous_options;
+
+	if(options.see_key == SKSEE)
+	{
+		options = run_see_key(options);
+	}
+	else if(options.see_key == SKNONE)
+	{
+		explain_see_keys();
+		options = receive_see_keys_option(options);
+	}
+	else if(options.see_key == SKPREVIOUS)
+	{
+		options.see_key = SKNONE;
+		options.rsa = RSANONE;
+	}
+
+	return options;
+}
+
+Options run_see_key(Options previous_options)
+{
+	Options options = previous_options;
+
+	inform_keys_to_user();
+
+	options.see_key = SKPREVIOUS;
+
+	return options;
+}
+
+
 Options run_encrypt_functions(Options previous_options)
 {
 	Options options = previous_options;
 	char *text_reference = get_text_by_file((char*)"text/exported.txt");
+
 
 	rsa_algorithm(text_reference,61,53);
 
@@ -167,6 +247,8 @@ Options get_standard_options_values()
 	options.text = TXTNONE;
 	options.msr = MSRNONE;
 	options.rsa = RSANONE;
+	options.gen_key = GKNONE;
+	options.see_key = SKNONE;
 	return options;
 }
 
@@ -291,14 +373,22 @@ Options receive_rsa_option(Options previous_options)
 	switch(input)
 	{
 		case 1:
-			options.rsa = RSAENCRYPT;
+			options.rsa = RSAGENKEYS;
 		break;
 
 		case 2:
-			options.rsa = RSADECRYPT;
+			options.rsa = RSASEEKEYS;
 		break;
 
 		case 3:
+			options.rsa = RSAENCRYPT;
+		break;
+
+		case 4:
+			options.rsa = RSADECRYPT;
+		break;
+
+		case 5:
 			options.rsa = RSAHACK;
 		break;
 
@@ -315,6 +405,74 @@ Options receive_rsa_option(Options previous_options)
 		break;
 	}
 	return options;	
+}
+
+Options receive_key_option(Options previous_options)
+{
+	Options options = previous_options;
+
+	int input = 10;
+	print_response_symbol();
+	scanf("%d", &input);
+	getchar();
+	switch(input)
+	{
+		case 1:
+			options.gen_key = GKGEN;
+		break;
+
+		case 2:
+			options.see_key = SKSEE;
+		break;
+
+		case 9:
+			options.gen_key = GKPREVIOUS;
+		break;
+
+		case 0:
+			options.main = QUIT;
+		break;
+
+		default:
+			options.gen_key = GKNONE;
+		break;
+	}
+
+	return options;
+}
+
+Options receive_see_keys_option(Options previous_options)
+{
+	Options options = previous_options;
+
+	int input = 10;
+	print_response_symbol();
+	scanf("%d", &input);
+	getchar();
+	switch(input)
+	{
+		case 1:
+			options.see_key = SKSEE;
+		break;
+
+		case 2:
+			options.gen_key = GKGEN;
+		break;
+
+		case 9:
+			options.see_key = SKPREVIOUS;
+		break;
+
+		case 0:
+			options.main = QUIT;
+		break;
+
+		default:
+			options.see_key = SKNONE;
+		break;
+	}
+
+	return options;
 }
 
 Options receive_msr_option(Options previous_options)
@@ -352,6 +510,11 @@ unsigned int receive_number_from_user()
 	scanf("%d", &input);
 	getchar();
 	return input;
+}
+
+Two_Natural_Numbers receive_prime_numbers()
+{
+	
 }
 
 // Header Procedures
@@ -464,7 +627,7 @@ void explain_text_upload_by_file()
 {
 	print_hline();
 	printf("Please inform the path of the file (based on current folder)\n");
-	printf("Example: /foo.txt\n");
+	printf("Example: messages/foo.txt\n");
 }
 
 void explain_text_upload_by_user()
@@ -489,12 +652,78 @@ void inform_rsa_option()
 {
 	print_hline();
 	print_choose();
-	printf("\t[1] Encrypt the Text\n");
-	printf("\t[2] Decrypt the Text\n");
-	printf("\t[3] Try to Hack a Encrypted Text\n");
+	printf("\t[1] Generate New Keys\n");
+	printf("\t[2] See Your Keys\n");
+	printf("\t[3] Encrypt the Text\n");
+	printf("\t[4] Decrypt the Text\n");
+	printf("\t[5] Try to Hack an Encrypted Text\n");
 	print_previous();
 	print_quit();
 	print_hline();
+}
+
+void explain_rivest_shamir_adleman()
+{
+	print_hline();
+	printf("\tThe RSA is a public-key cryptosystem widely used\n");
+	printf("\tfor secure data trasnsmission. It works with two keys:\n");
+	printf("\tThe Public Key, a.k.a Encryption Key, can be known by\n");
+	printf("\teveryone and is used for encrypting messages. The Private\n");
+	printf("\tKey, a.k.a. Decryption Key, is secret and can decrypt the\n");
+	printf("\tthe message encrypted by the Public Key. Both keys are generated\n");
+	printf("\twith two prime numbers! Or at least high enough to be confused as\n");
+	printf("\tone. This software can easily deal with numbers in 9999 order, but\n");
+	printf("\tis not safe above this.\n");
+	print_hline();
+}
+
+void inform_encrypt_option()
+{
+	print_hline();
+	print_choose();
+	printf("\t[1] Encrypt the Current Exported Text\n");
+	printf("\t[2] Modify the Current Exported Text\n");
+	printf("\t[3] Read the Current Exported Text\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void inform_decrypt_option()
+{
+	print_hline();
+	print_choose();
+	printf("\t[1] Decrypt the Current Exported Text\n");
+	printf("\t[2] Modify the Current Exported Text\n");
+	printf("\t[3] Read the Current Exported Text\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void inform_hack_option()
+{
+	print_hline();
+	print_choose();
+	printf("\t[1] Try to Hack the Current Exported Text\n");
+	printf("\t[2] Modify the Current Exported Text\n");
+	printf("\t[3] Read the Current Exported Text\n");
+	printf("\t[4] Encrypt and Try to Hack the Current Exported Text\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void inform_result_encrypt()
+{
+	print_hline();
+	printf("\t\t\tMESSAGE ENCRYPTED!\n");
+	print_hline();
+	printf("\n\n");
+	printf("\t The Prime  is: %s", get_text_by_file((char*)"secret/public_key.txt"));
+	printf("\t The Private Key is: %s", get_text_by_file((char*)"secret/private_key.txt"));
+	printf("%s", get_text_by_file((char*)"output/encrypted_text.txt"));
+	printf("\n\n");
 }
 
 void explain_miller_selfridge_rabin()
@@ -512,7 +741,7 @@ void explain_miller_selfridge_rabin()
 	print_hline();
 }
 
-void inform_number_desirable()
+void inform_number_to_check_primality()
 {
 	print_hline();
 	printf("Please inform a number to check if it is prime or\n");
