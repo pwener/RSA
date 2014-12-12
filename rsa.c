@@ -9,13 +9,13 @@ Pair_of_Keys* generate_keys(int first_prime, int second_prime)
 	int modular_multiplicative_inverse = find_modular_multiplicative_inverse(coprime, euler_totient);		
 	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
 	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
-	Pair_of_Keys* keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
-	keys->private_key = private_key;
-	keys->public_key = public_key;
 	public_key->rsa_modulus = rsa_modulus;	
 	public_key->coprime = coprime;
 	private_key->rsa_modulus = rsa_modulus;
 	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;
+	Pair_of_Keys* keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
+	keys->private_key = private_key;
+	keys->public_key = public_key;
 	return keys;
 }
 
@@ -94,21 +94,21 @@ void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_
 
 void brute_force(char* encrypted_text, Public_Key* public_key)
 {
-	char** dictionary = get_dictionary();
+/*	char** dictionary = get_dictionary();
 	Boolean found = FALSE;	
 	unsigned int key;
 	int frequency_of_success = 0;
 	int number_of_words = 0;
-	char delimiters[7] = " .,!?\"'";
+	char delimiters[8] = " .,!?\"'";
 	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
-	char aux[strlen(encrypted_text)* get_magnitude(key->rsa_modulus))];
+	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus))];
 	char* token;
 	char* tokens[2000];
 	while(!found)
 	{
 		printf("Tentando a chave>> %d\n", key);
 		//Descriptografa o texto
-		decrypt(encrypted_text, key, public_key);
+		//decrypt(encrypted_text, key, public_key);
 		strcpy(aux, encrypted_text);
 		number_of_words = 0;
 		token = strtok(aux, delimiters);
@@ -137,5 +137,5 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 							break;
 				}
 		}
-	}
+	}*/
 }

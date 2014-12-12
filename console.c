@@ -146,6 +146,7 @@ Options run_key_functions(Options previous_options)
 	else if(options.gen_key == GKPREVIOUS)
 	{
 		options.gen_key = GKNONE;
+		options.see_key = SKNONE;
 		options.rsa = RSANONE;
 	}
 
@@ -169,7 +170,11 @@ Options run_generate_key(Options previous_options)
 
 		export_keys_to_file(pair_of_keys);
 
-		options.gen_key = GKPREVIOUS;	
+		press_enter();
+
+		options = run_see_key(options);
+
+		options.gen_key = GKPREVIOUS;
 	}
 
 	return options;
@@ -192,6 +197,7 @@ Options run_see_keys_functions(Options previous_options)
 	else if(options.see_key == SKPREVIOUS)
 	{
 		options.see_key = SKNONE;
+		options.gen_key = GKNONE;
 		options.rsa = RSANONE;
 	}
 
@@ -204,6 +210,8 @@ Options run_see_key(Options previous_options)
 
 	inform_keys_to_user();
 
+	press_enter();
+	
 	options.see_key = SKPREVIOUS;
 
 	return options;
@@ -214,7 +222,6 @@ Options run_encrypt_functions(Options previous_options)
 {
 	Options options = previous_options;
 	char *text_reference = get_text_by_file((char*)"text/exported.txt");
-
 
 	// TODO
 
@@ -430,6 +437,7 @@ Options receive_key_option(Options previous_options)
 		break;
 
 		case 2:
+			options.gen_key = GKNONE;
 			options.see_key = SKSEE;
 		break;
 
@@ -464,6 +472,7 @@ Options receive_see_keys_option(Options previous_options)
 		break;
 
 		case 2:
+			options.see_key = SKNONE;
 			options.gen_key = GKGEN;
 		break;
 
@@ -638,7 +647,7 @@ void inform_about()
 	printf("\t\t\tWelcome to the RSA Cryptosystem!\n");
 	printf("\tThis Software realize the RSA Encryption and Decryption\n");
 	printf("\tand implements a rustic algorithm who tries to solve the\n");
-	printf("\tRSA without knowing the public and private keys.");
+	printf("\tRSA without knowing the public and private keys.\n");
 	print_hline();
 }
 
@@ -688,13 +697,13 @@ void explain_text_upload_by_user()
 
 void inform_wrong_path()
 {
-	printf("[ERROR]\tThe file could not be found!");
+	printf("\t\t\n[ERROR]\tThe file could not be found!");
 	print_hline();
 }
 
 void inform_text_is_fine()
 {
-	printf("[Yiikies!]\tThe text was succesfully imported!");
+	printf("\t\t\n[Yiikies!]\tThe text was succesfully imported!");
 	print_hline();
 }
 
@@ -723,7 +732,7 @@ void explain_rivest_shamir_adleman()
 	printf("\tthe message encrypted by the Public Key. Both keys are generated\n");
 	printf("\twith two prime numbers! Or at least high enough to be confused as\n");
 	printf("\tone. This software can easily deal with numbers in 9999 order, but\n");
-	printf("\tis not safe above this.\n");
+	printf("\tis not safe above this.\n\n");
 	print_hline();
 }
 
@@ -734,7 +743,7 @@ void explain_key_generation()
 	printf("\ttwo Keys (Public - shared by all, Private - keeped in secret)\n");
 	printf("\tgenerated with Modular Arithmetics using two prime numbers.\n");
 	printf("\tYou'll be asked to put two natural numbers, keep in mind they\n");
-	printf("\tneed to be primes, and will be tested with MSR Primality Test.\n");
+	printf("\tneed to be primes, and will be tested with MSR Primality Test.\n\n");
 	print_choose();
 	printf("\t[1] Generate New Keys\n");
 	printf("\t[2] See Your Keys\n");
@@ -747,9 +756,10 @@ void explain_primes_to_generate_key()
 {
 	print_hline();
 	printf("\tPlease, inform two prime numbers to generate the Public Key and\n");
-	printf("\tPrivate Key. Use an space between the numbers.\n");
-	printf("\tAs Like: <number_one><space><number_two>\n");
-	printf("\tExample: 8969 13711\n");
+	printf("\tPrivate Key. Inform the first prime number and press enter, then\n");
+	printf("\tinform the second prime number and press enter.\n");
+	printf("\tAs Like: <number_one><enter><number_two><enter>\n");
+	printf("\tExample:\n\t\t8969\n\t\t13711\n\n");
 }
 
 void explain_see_keys()
@@ -757,7 +767,7 @@ void explain_see_keys()
 	print_hline();
 	printf("\tTo see your keys you need to generate they first. If you did not\n");
 	printf("\tgenerate your keys before, just select as described below the option\n");
-	printf("\tto generate public key and private key.\n");
+	printf("\tto generate public key and private key.\n\n");
 	print_choose();
 	printf("\t[1] See Your Keys\n");
 	printf("\t[2] Generate New Keys\n");
@@ -769,10 +779,10 @@ void explain_see_keys()
 void inform_keys_to_user()
 {
 	print_hline();
-	printf("\nYOUR KEYS\n");
+	printf("\n\t\t\t\tYOUR KEYS\n");
 	print_hline();
-	printf("Public Key:\t%s\n", get_text_by_file((char*)"keys/public_key.txt"));
-	printf("Private Key:\t%s\n", get_text_by_file((char*)"keys/private_key.txt"));
+	printf("\t\tPublic Key:\t%s\n", get_text_by_file((char*)"keys/public_key.txt"));
+	printf("\t\tPrivate Key:\t%s\n", get_text_by_file((char*)"keys/private_key.txt"));
 	print_hline();
 }
 
