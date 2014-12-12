@@ -1,7 +1,7 @@
 #include "rsa.h"
 #include <string.h>
 
-Pair_of_Keys* rsa_algorithm(char* text, int first_prime, int second_prime)
+Pair_of_Keys* generate_keys(int first_prime, int second_prime)
 {
 	int rsa_modulus = first_prime * second_prime;
 	int euler_totient = (first_prime - 1) * (second_prime - 1);
@@ -16,7 +16,6 @@ Pair_of_Keys* rsa_algorithm(char* text, int first_prime, int second_prime)
 	public_key->coprime = coprime;
 	private_key->rsa_modulus = rsa_modulus;
 	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;
-	encrypt(text, public_key);
 	return keys;
 }
 
@@ -76,7 +75,8 @@ char* encrypt(char* pure_text, Public_Key* key)
 	}
 	encrypted_string[k++] = '\0';
 	//printf("%s\n", encrypted_string);
-		
+	free(aux);
+	free(encrypted_values);		
 	return encrypted_string;
 }
 
@@ -92,7 +92,8 @@ void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_
 	printf("Decrypted text: %s\n\n", encrypted_text);
 }
 
-int integer_size(int number) {
+int integer_size(int number)
+{
 	int i = 1, counter = 0;
 	while (number / i != 0) {
 		counter++;

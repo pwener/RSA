@@ -22,12 +22,12 @@ typedef struct pair_of_keys {
 	Public_Key* public_key;
 } Pair_of_Keys;
 
-Pair_of_Keys* rsa_algorithm(char* text, int first_prime, int second_prime);
+Pair_of_Keys* generate_keys(int first_prime, int second_prime);
 int read_number();
 int find_coprime(int euler_totient);
 int great_common_divisor(int first_number, int second_number);
 int find_modular_multiplicative_inverse(int coprime, int euler_totient);
-void encrypt(char* pure_text, Public_Key* key);
+char* encrypt(char* pure_text, Public_Key* key);
 void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key);
 int integer_size(int number);
 
