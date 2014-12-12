@@ -25,4 +25,6 @@ unsigned int random_natural_number(unsigned int minimum_number, unsigned int max
 
 Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number);
 
+int get_magnitude(int input_number);
+
 #endif // ALGEBRA_H_

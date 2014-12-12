@@ -80,3 +80,50 @@ void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_
 	printf("Decrypted text: %s\n\n", encrypted_text);
 }
 
+void brute_force(char* encrypted_text, Public_Key* public_key)
+{
+	char** dictionary = get_dictionary();
+	Boolean found = FALSE;	
+	unsigned int key;
+	int frequency_of_success = 0;
+	int number_of_words = 0;
+	char delimiters[7] = " .,!?\"'";
+	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
+	char aux[strlen(encrypted_text)* get_magnitude()];
+	char* token;
+	char* tokens[2000];
+	while(!found)
+	{
+		printf("Tentando a chave>> %d\n", key);
+		//Descriptografa o texto
+		decrypt(encrypted_text, key, public_key);
+		strcpy(aux, encrypted_text);
+		number_of_words = 0;
+		token = strtok(aux, delimiters);
+		while (token != NULL)
+		{
+			tokens[number_of_words++] = token;
+				token = strtok(NULL, delimiters);
+		}
+		int i, j;
+		long dicionary_lines = numberoflines(dictionary_file);
+		for (i = 0; i < number_of_words; i++)
+		{
+				for (j = 0; j < dicionary_lines; j++) 
+				{
+						if (compare_strings(tokens[i], dictionary[j]))
+						{
+							frequency_of_success++;
+							break;
+						}
+				}
+				if ((float) frequency_of_success >= 0.8 * number_of_words) 
+				{
+							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
+							printf("\n\n CHAVE ENCONTRADA: %s\n\n", key);					
+							found = true;
+							break;
+				}
+		}
+	}
+}

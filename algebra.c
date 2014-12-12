@@ -56,7 +56,8 @@ Boolean is_divisible(int numerator_number, int denominator_number)
  *	@param maximum_number (b)
  *	@return random_number (x)
  */
-unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number){
+unsigned int random_natural_number(unsigned int minimum_number, unsigned int maximum_number)
+{
 	srand(time(NULL));
 	unsigned int random_number = (rand() % (maximum_number - minimum_number + 1)) + minimum_number;
 	return random_number;
@@ -71,7 +72,8 @@ unsigned int random_natural_number(unsigned int minimum_number, unsigned int max
  *		first_number (s)
  *		second_number (d) an odd value
  */
-Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number){
+Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number)
+{
 	unsigned int s = 1;
 	unsigned int d = 1;
 	Two_Natural_Numbers factors;
@@ -88,4 +90,21 @@ Two_Natural_Numbers decompose_as_power_of_two(unsigned int input_number){
 			}
 		}       
 	}  
+}
+
+/**
+ *	[EN] This method return magnitude's number
+ *	[PT] Esse método retorna a magnitude do número
+ *	@param input_number number to be calculated magnitude
+ *	@return magnitude
+ */
+int get_magnitude(int input_number)
+{	
+	int number = input_number;
+	int magnitude = 0;
+	while(number > 0){
+		magnitude++;
+		number = number / 10;
+    };
+    return magnitude;
 }
