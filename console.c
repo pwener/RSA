@@ -135,6 +135,7 @@ Options run_key_functions(Options previous_options)
 
 	if(options.gen_key == GKGEN)
 	{
+		explain_primes_to_generate_key();
 		options = run_generate_key(options);
 	}
 	else if(options.gen_key == GKNONE)
@@ -156,11 +157,20 @@ Options run_generate_key(Options previous_options)
 	Options options = previous_options;
 
 	Two_Natural_Numbers prime_numbers = receive_prime_numbers();
-	Pair_Of_Keys pair_of_keys = generate_keys(prime_numbers.first, primer_numbers.second);
 
-	export_keys_to_file(pair_of_keys);
+	if(prime_numbers.first_number == 1 || prime_numbers.second_number == 1)
+	{
+		options = get_standard_options_values();
+	}
+	else
+	{
+		Pair_of_Keys* pair_of_keys = generate_keys(prime_numbers.first_number,
+			prime_numbers.second_number);
 
-	options.gen_key = GKPREVIOUS;
+		export_keys_to_file(pair_of_keys);
+
+		options.gen_key = GKPREVIOUS;	
+	}
 
 	return options;
 }
@@ -205,8 +215,6 @@ Options run_encrypt_functions(Options previous_options)
 	Options options = previous_options;
 	char *text_reference = get_text_by_file((char*)"text/exported.txt");
 
-
-	rsa_algorithm(text_reference,61,53);
 
 	// TODO
 
@@ -514,7 +522,49 @@ unsigned int receive_number_from_user()
 
 Two_Natural_Numbers receive_prime_numbers()
 {
-	
+	Two_Natural_Numbers prime_numbers;
+
+	prime_numbers.first_number = receive_number_from_user();
+	prime_numbers.second_number = receive_number_from_user();
+
+	Boolean is_first_number_prime = test_primality_msr(prime_numbers.first_number);
+	Boolean is_second_number_prime = test_primality_msr(prime_numbers.second_number);
+	Boolean is_both_numbers_primes = FALSE;
+
+	if(is_first_number_prime == TRUE && is_second_number_prime == TRUE)
+	{
+		is_both_numbers_primes = TRUE;
+	}
+	else
+	{
+		if(is_first_number_prime == FALSE)
+		{
+			inform_its_composite(prime_numbers.first_number);
+		}
+
+		if(is_second_number_prime == FALSE)
+		{
+			inform_its_composite(prime_numbers.second_number);
+		}
+		prime_numbers.first_number = 1;
+		prime_numbers.second_number = 1;
+	}
+
+	return prime_numbers;
+}
+
+void export_keys_to_file(Pair_of_Keys* pair_of_keys)
+{
+	FILE *standard_public_key_file = fopen("keys/public_key.txt", "w");
+	fprintf(standard_public_key_file, "%d %d",
+		pair_of_keys->public_key->rsa_modulus, pair_of_keys->public_key->coprime);
+	fclose(standard_public_key_file);
+
+	FILE *standard_private_key_file = fopen("keys/private_key.txt", "w");
+	fprintf(standard_private_key_file, "%d %d",
+		pair_of_keys->private_key->rsa_modulus,
+		pair_of_keys->private_key->modular_multiplicative_inverse);
+	fclose(standard_private_key_file);
 }
 
 // Header Procedures
@@ -677,6 +727,55 @@ void explain_rivest_shamir_adleman()
 	print_hline();
 }
 
+void explain_key_generation()
+{
+	print_hline();
+	printf("\tTo encrypt and decrypt using RSA Cryptosystem is required\n");
+	printf("\ttwo Keys (Public - shared by all, Private - keeped in secret)\n");
+	printf("\tgenerated with Modular Arithmetics using two prime numbers.\n");
+	printf("\tYou'll be asked to put two natural numbers, keep in mind they\n");
+	printf("\tneed to be primes, and will be tested with MSR Primality Test.\n");
+	print_choose();
+	printf("\t[1] Generate New Keys\n");
+	printf("\t[2] See Your Keys\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void explain_primes_to_generate_key()
+{
+	print_hline();
+	printf("\tPlease, inform two prime numbers to generate the Public Key and\n");
+	printf("\tPrivate Key. Use an space between the numbers.\n");
+	printf("\tAs Like: <number_one><space><number_two>\n");
+	printf("\tExample: 8969 13711\n");
+}
+
+void explain_see_keys()
+{
+	print_hline();
+	printf("\tTo see your keys you need to generate they first. If you did not\n");
+	printf("\tgenerate your keys before, just select as described below the option\n");
+	printf("\tto generate public key and private key.\n");
+	print_choose();
+	printf("\t[1] See Your Keys\n");
+	printf("\t[2] Generate New Keys\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void inform_keys_to_user()
+{
+	print_hline();
+	printf("\nYOUR KEYS\n");
+	print_hline();
+	printf("Public Key:\t%s\n", get_text_by_file((char*)"keys/public_key.txt"));
+	printf("Private Key:\t%s\n", get_text_by_file((char*)"keys/private_key.txt"));
+	print_hline();
+}
+
 void inform_encrypt_option()
 {
 	print_hline();
@@ -720,8 +819,8 @@ void inform_result_encrypt()
 	printf("\t\t\tMESSAGE ENCRYPTED!\n");
 	print_hline();
 	printf("\n\n");
-	printf("\t The Prime  is: %s", get_text_by_file((char*)"secret/public_key.txt"));
-	printf("\t The Private Key is: %s", get_text_by_file((char*)"secret/private_key.txt"));
+	printf("\t The Prime  is: %s", get_text_by_file((char*)"keys/public_key.txt"));
+	printf("\t The Private Key is: %s", get_text_by_file((char*)"keys/private_key.txt"));
 	printf("%s", get_text_by_file((char*)"output/encrypted_text.txt"));
 	printf("\n\n");
 }

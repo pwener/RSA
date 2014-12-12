@@ -97,7 +97,7 @@ Options receive_msr_option(Options previous_options);
 unsigned int receive_number_from_user();
 Two_Natural_Numbers receive_prime_numbers();
 
-void export_keys_to_file(Pair_Of_Keys pair_of_keys);
+void export_keys_to_file(Pair_of_Keys* pair_of_keys);
 
 void print_authors();
 void print_institute();
@@ -124,6 +124,7 @@ void inform_text_is_fine();
 void inform_rsa_option();
 void explain_rivest_shamir_adleman();
 void explain_key_generation();
+void explain_primes_to_generate_key();
 void explain_see_keys();
 void inform_keys_to_user();
 void inform_encrypt_option();
