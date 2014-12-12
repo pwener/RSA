@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 arroz doce
+=======
+A menina brinca na rua
+>>>>>>> encriptação realizada
