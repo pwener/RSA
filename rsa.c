@@ -55,7 +55,7 @@ char* encrypt(char* pure_text, Public_Key* key)
 	int i, j, k;
 	for (i = 0; pure_text[i]; i++);
 	int* encrypted_values = (int*) malloc(i * sizeof(int));	
-	int modulus_size = integer_size(key->rsa_modulus);
+	int modulus_size = get_magnitude(key->rsa_modulus);
 	char* encrypted_string = (char*) malloc(modulus_size * strlen(pure_text) * sizeof(char));  
 	char* aux = (char*) malloc(modulus_size * sizeof(char));
 	for (i = 0; pure_text[i]; i++) {
@@ -65,7 +65,7 @@ char* encrypt(char* pure_text, Public_Key* key)
 	
 	for (i = 0, k = 0; pure_text[i]; i++) {
 		printf("\nok\n");
-		for (j = modulus_size; j > integer_size(encrypted_values[i]); j--)
+		for (j = modulus_size; j > get_magnitude(encrypted_values[i]); j--)
 			encrypted_string[k++] = '0';
 		sprintf(aux, "%d", encrypted_values[i]);
 
@@ -92,14 +92,50 @@ void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_
 	printf("Decrypted text: %s\n\n", encrypted_text);
 }
 
-int integer_size(int number)
+void brute_force(char* encrypted_text, Public_Key* public_key)
 {
-	int i = 1, counter = 0;
-	while (number / i != 0) {
-		counter++;
-		i *= 10;
+	char** dictionary = get_dictionary();
+	Boolean found = FALSE;	
+	unsigned int key;
+	int frequency_of_success = 0;
+	int number_of_words = 0;
+	char delimiters[7] = " .,!?\"'";
+	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
+	char aux[strlen(encrypted_text)* get_magnitude(key->rsa_modulus))];
+	char* token;
+	char* tokens[2000];
+	while(!found)
+	{
+		printf("Tentando a chave>> %d\n", key);
+		//Descriptografa o texto
+		decrypt(encrypted_text, key, public_key);
+		strcpy(aux, encrypted_text);
+		number_of_words = 0;
+		token = strtok(aux, delimiters);
+		while (token != NULL)
+		{
+			tokens[number_of_words++] = token;
+				token = strtok(NULL, delimiters);
+		}
+		int i, j;
+		long dicionary_lines = numberoflines(dictionary_file);
+		for (i = 0; i < number_of_words; i++)
+		{
+				for (j = 0; j < dicionary_lines; j++) 
+				{
+						if (compare_strings(tokens[i], dictionary[j]))
+						{
+							frequency_of_success++;
+							break;
+						}
+				}
+				if ((float) frequency_of_success >= 0.8 * number_of_words) 
+				{
+							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
+							printf("\n\n CHAVE ENCONTRADA: %s\n\n", key);					
+							found = true;
+							break;
+				}
+		}
 	}
-	return counter; 
 }
-
-

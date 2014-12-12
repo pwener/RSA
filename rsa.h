@@ -5,6 +5,7 @@
 #include "modulus.h"
 #include "text.h"
 #include "msr.h"
+#include "algebra.h"
 #include <time.h>
 
 typedef struct public_key {
@@ -29,6 +30,6 @@ int great_common_divisor(int first_number, int second_number);
 int find_modular_multiplicative_inverse(int coprime, int euler_totient);
 char* encrypt(char* pure_text, Public_Key* key);
 void decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key);
-int integer_size(int number);
+void brute_force(char* encrypted_text, Public_Key* public_key);
 
 #endif // RSA_H_

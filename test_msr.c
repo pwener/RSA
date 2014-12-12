@@ -4,7 +4,7 @@
 
 int main(){
 	int x;
-	for(x = 4; x < 100; x++){
+	for(x = 4; x < 300; x++){
 		if(test_primality_msr(x)){
 			printf("%d , ", x);
 		}
