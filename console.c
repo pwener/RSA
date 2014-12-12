@@ -31,7 +31,6 @@ Options run_rsa_functions(Options previous_options)
 	if(options.rsa == RSAENCRYPT)
 	{
 		options = run_encrypt_functions(options);
-		press_enter();
 	}
 	else if(options.rsa == RSADECRYPT)
 	{
@@ -39,7 +38,7 @@ Options run_rsa_functions(Options previous_options)
 	}
 	else if(options.rsa == RSAHACK)
 	{
-		//run_hack_functions();
+		options = run_hack_functions(options);
 	}
 	else if(options.rsa == RSANONE)
 	{
@@ -87,8 +86,8 @@ Options run_msr_functions(Options previous_options)
 	}
 	else if(options.msr == MSRNONE)
 	{
-		//explain_miller_selfridge_rabin();
-		//options = receive_msr_option(options);
+		explain_miller_selfridge_rabin();
+		options = receive_msr_option(options);
 	}
 	else if(options.msr == MSRPREVIOUS)
 	{
@@ -102,19 +101,22 @@ Options run_msr_functions(Options previous_options)
 Options run_test_primality(Options previous_options)
 {
 	Options options = previous_options;
+	inform_number_desirable();
+	unsigned int possibly_prime_number = receive_number_from_user();
+	Boolean is_number_prime = test_primality_msr(possibly_prime_number);
 
-	// unsigned int possibly_prime_number = receive_number();
-	// Boolean is_number_prime = check_possibly_prime_number(possibly_prime_number);
-	//if(is_number_prime==TRUE)
-	//{
-		//inform_its_prime();
-	//}
-	//else if(is_number_prime==FALSE)
-	//{
-		//inform_its_composite();
-	//}
+	if(is_number_prime==TRUE)
+	{
+		inform_its_prime(possibly_prime_number);
+	}
+	else if(is_number_prime==FALSE)
+	{
+		inform_its_composite(possibly_prime_number);
+	}
 
 	options.msr = MSRNONE;
+
+	press_enter();
 	
 	return options;
 }
@@ -126,16 +128,32 @@ Options run_encrypt_functions(Options previous_options)
 
 	rsa_algorithm(text_reference,61,53);
 
-	options = get_standard_options_values();
+	// TODO
 
+	options = get_standard_options_values();
 	return options;
 }
 
 Options run_decrypt_functions(Options previous_options)
 {
 	Options options = previous_options;
+	char *text_reference = get_text_by_file((char*)"text/exported.txt");
 
+	// TODO
+
+	options = get_standard_options_values();
 	return options;
+}
+
+Options run_hack_functions(Options previous_options)
+{
+	Options options = previous_options;
+	char *text_reference = get_text_by_file((char*)"text/exported.txt");
+
+	// TODO
+
+	options = get_standard_options_values();
+	return options;	
 }
 
 
@@ -299,6 +317,43 @@ Options receive_rsa_option(Options previous_options)
 	return options;	
 }
 
+Options receive_msr_option(Options previous_options)
+{
+	Options options = previous_options;
+	int input = 10;
+	print_response_symbol();
+	scanf("%d", &input);
+	getchar();
+	switch(input)
+	{
+		case 1:
+			options.msr = MSRTEST;
+		break;
+
+		case 9:
+			options.msr = MSRPREVIOUS;
+		break;
+
+		case 0:
+			options.main = QUIT;
+		break;
+
+		default:
+			options.msr = MSRNONE;
+		break;
+	}
+	return options;	
+}
+
+unsigned int receive_number_from_user()
+{
+	unsigned int input = 1;
+	print_response_symbol();
+	scanf("%d", &input);
+	getchar();
+	return input;
+}
+
 // Header Procedures
 
 void print_authors()
@@ -430,7 +485,8 @@ void inform_text_is_fine()
 	print_hline();
 }
 
-void inform_rsa_option(){
+void inform_rsa_option()
+{
 	print_hline();
 	print_choose();
 	printf("\t[1] Encrypt the Text\n");
@@ -438,6 +494,41 @@ void inform_rsa_option(){
 	printf("\t[3] Try to Hack a Encrypted Text\n");
 	print_previous();
 	print_quit();
+	print_hline();
+}
+
+void explain_miller_selfridge_rabin()
+{
+	print_hline();
+	printf("\tThis Primality Test use the Algorithm MSR\n");
+	printf("\t(Miller-Selfridge-Rabin) to check if a number\n");
+	printf("\tis prime or composite, with an accuracy of 100%%\n");
+	printf("\tif it is a prime number, and 25%% if is a composite\n");
+	printf("\tnumber.\n");
+	print_choose();
+	printf("\t[1] Check if a Number is Prime or Composite\n");
+	print_previous();
+	print_quit();
+	print_hline();
+}
+
+void inform_number_desirable()
+{
+	print_hline();
+	printf("Please inform a number to check if it is prime or\n");
+	printf("composite.\n");
+	printf("Example: 8123 (it's prime), 9327 (it's composite)\n");
+}
+
+void inform_its_prime(unsigned int prime_number)
+{
+	printf("\n->\tThe Number [%d] is Prime!\n", prime_number);
+	print_hline();
+}
+
+void inform_its_composite(unsigned int composite_number)
+{
+	printf("\n->\tThe Number [%d] is Composite!\n", composite_number);
 	print_hline();
 }
 

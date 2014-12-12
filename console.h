@@ -46,11 +46,11 @@ typedef enum RSA_Option
 
 typedef struct Options
 {
-	Main_Option main;
-	Type_Option type;
-	Miller_Selfridge_Rabin_Option msr;
-	Text_Option text;
-	RSA_Option rsa;
+	Main_Opt main;
+	Type_Opt type;
+	MSR_Opt msr;
+	Text_Opt text;
+	RSA_Opt rsa;
 }Options;
 
 Options run_functions(Options previous_options);
@@ -59,6 +59,7 @@ Options run_msr_functions(Options previous_options);
 Options run_test_primality(Options previous_options);
 Options run_encrypt_functions(Options previous_options);
 Options run_decrypt_functions(Options previous_options);
+Options run_hack_functions(Options previous_options);
 
 Options get_standard_options_values();
 Options receive_type_option(Options previous_options);
@@ -66,9 +67,9 @@ Options receive_text_upload_option(Options previous_options);
 Options receive_text_by_file(Options previous_options);
 Options receive_text_by_user(Options previous_options);
 Options receive_rsa_option(Options previous_options);
-//Options receive_msr_option(Options previous_options);
+Options receive_msr_option(Options previous_options);
 
-Boolean check_possibly_prime_number(unsigned int possibly_prime_number);
+unsigned int receive_number_from_user();
 
 void print_authors();
 void print_institute();
@@ -94,7 +95,10 @@ void inform_text_is_fine();
 
 void inform_rsa_option();
 
-//void explain_miller_selfridge_rabin();
+void explain_miller_selfridge_rabin();
+void inform_number_desirable();
+void inform_its_prime(unsigned int prime_number);
+void inform_its_composite(unsigned int composite_number);
 
 void inform_unknown_error();
 
