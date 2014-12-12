@@ -80,32 +80,26 @@ char* encrypt(char* pure_text, Public_Key* key)
 
 char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
 {
-	long long int i = 0, j = 0, k = 0, l = 0;
-	long long int magnitude = get_magnitude(public_key->rsa_modulus);
-	long long int length = (strlen(encrypted_text)) / magnitude;
+	int i = 0, j = 0, k = 0, l = 0;
+	int magnitude = get_magnitude(public_key->rsa_modulus);
+	int length = (strlen(encrypted_text)) / magnitude;
 	char* decrypted_text = (char*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(char));
 	long long int* decrypted_values = (long long int*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(long long int));
 	char* aux = (char*) malloc((magnitude + 1) * sizeof(char));
 	aux[magnitude] = '\0';
-	decrypted_text[strlen(encrypted_text) / magnitude] = '\0';
 
 	for (i = 0; encrypted_text[i]; i += magnitude) {
 		k = 0;
 		for (j = i; j < (i + magnitude); j++)
 			aux[k++] = encrypted_text[j];
 		decrypted_values[l++] = atoi(aux);
-		printf("%lld\n", decrypted_values[l - 1]);	
 	}
-	printf("l = %lld\n", l);
 	for (i = 0; i < l; i++) {
-		printf("decrypted_values[%lld] = %lld\n", i, decrypted_values[i]);
 		decrypted_text[i] = exponential_modulus(decrypted_values[i], private_key->modular_multiplicative_inverse, public_key->rsa_modulus);
-		printf("decrypted_text[%lld] = %c\n", i, decrypted_text[i]);	
 	}
 	decrypted_text[i] = '\0';
 	free(aux);
 	free(decrypted_values);
-	printf("Decrypted text: %s\n\n", decrypted_text);
 	return decrypted_text;
 }
 
@@ -113,12 +107,13 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 {
 	char** dictionary = get_dictionary();
 	Boolean found = FALSE;	
-	unsigned long long int key;
-	long long int frequency_of_success = 0;
-	long long int number_of_words = 0;
-	char delimiters[8] = " .,!?\"'";
+	long long int key;
+	int frequency_of_success = 0;
+	int number_of_words = 0;
+	char delimiters[7] = " .,!?\"'";
 	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
-	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus)];
+	//char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus)];
+	char* decrypted_text = (char*) malloc((strlen(encrypted_text)/get_magnitude(public_key->rsa_modulus)+1)*sizeof(char));
 	char* token;
 	char* tokens[2000];
 	while(!found)
@@ -128,17 +123,15 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 		Private_Key *private_key = (Private_Key*) malloc(sizeof(Private_Key));
 		private_key->rsa_modulus = public_key->rsa_modulus;
 		private_key->modular_multiplicative_inverse = key;
-		decrypt(encrypted_text, private_key, public_key);
-		strcpy(aux, encrypted_text);
+		decrypted_text = decrypt(encrypted_text, private_key, public_key);
 		number_of_words = 0;
-		token = strtok(aux, delimiters);
+		token = strtok(decrypted_text, delimiters);
 		while (token != NULL)
 		{
 			tokens[number_of_words++] = token;
-				token = strtok(NULL, delimiters);
+			token = strtok(NULL, delimiters);
 		}
-		long long int i, j;
-		
+		int i, j;
 		long dicionary_lines = numberoflines(fopen("dicionario.pt.txt", "r"));
 		for (i = 0; i < number_of_words; i++)
 		{
@@ -153,10 +146,13 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 				if ((float) frequency_of_success >= 0.8 * number_of_words) 
 				{
 							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
-							printf("\n\n CHAVE ENCONTRADA: %lld\n\n", key);					
+							printf("\n\n CHAVE ENCONTRADA: %lld\n\n", key);
+							printf("MSG>> %s\n", decrypted_text);					
 							found = TRUE;
 							break;
 				}
 		}
+		frequency_of_success = 0;
+		key++;
 	}
 }
