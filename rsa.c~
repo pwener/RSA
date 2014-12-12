@@ -5,21 +5,17 @@ Pair_of_Keys* generate_keys(int first_prime, int second_prime)
 {
 	int rsa_modulus = first_prime * second_prime;
 	int euler_totient = (first_prime - 1) * (second_prime - 1);
-<<<<<<< HEAD
 	int coprime = find_coprime(euler_totient);
-=======
-	int coprime = 17;//find_coprime(euler_totient);
->>>>>>> Sistema de encriptacao e decriptacao
 	int modular_multiplicative_inverse = find_modular_multiplicative_inverse(coprime, euler_totient);		
 	Public_Key* public_key = (Public_Key*) malloc(sizeof(Public_Key));
 	Private_Key* private_key = (Private_Key*) malloc(sizeof(Private_Key));
-	Pair_of_Keys* keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
-	keys->private_key = private_key;
-	keys->public_key = public_key;
 	public_key->rsa_modulus = rsa_modulus;	
 	public_key->coprime = coprime;
 	private_key->rsa_modulus = rsa_modulus;
 	private_key->modular_multiplicative_inverse = modular_multiplicative_inverse;
+	Pair_of_Keys* keys = (Pair_of_Keys*) malloc(sizeof(Pair_of_Keys));
+	keys->private_key = private_key;
+	keys->public_key = public_key;
 	return keys;
 }
 
@@ -59,11 +55,7 @@ char* encrypt(char* pure_text, Public_Key* key)
 	int i, j, k;
 	for (i = 0; pure_text[i]; i++);
 	int* encrypted_values = (int*) malloc(i * sizeof(int));	
-<<<<<<< HEAD
 	int modulus_size = get_magnitude(key->rsa_modulus);
-=======
-	int modulus_size = integer_size(key->rsa_modulus);
->>>>>>> Sistema de encriptacao e decriptacao
 	char* encrypted_string = (char*) malloc(modulus_size * strlen(pure_text) * sizeof(char));  
 	char* aux = (char*) malloc(modulus_size * sizeof(char));
 	for (i = 0; pure_text[i]; i++) {
@@ -72,11 +64,7 @@ char* encrypt(char* pure_text, Public_Key* key)
 	}
 	
 	for (i = 0, k = 0; pure_text[i]; i++) {
-<<<<<<< HEAD
 		for (j = modulus_size; j > get_magnitude(encrypted_values[i]); j--)
-=======
-		for (j = modulus_size; j > integer_size(encrypted_values[i]); j--)
->>>>>>> Sistema de encriptacao e decriptacao
 			encrypted_string[k++] = '0';
 		sprintf(aux, "%d", encrypted_values[i]);
 
@@ -95,11 +83,7 @@ char* encrypt(char* pure_text, Public_Key* key)
 char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
 {
 	int i = 0, j = 0, k = 0, l = 0;
-<<<<<<< HEAD
 	int magnitude = get_magnitude(public_key->rsa_modulus);
-=======
-	int magnitude = integer_size(public_key->rsa_modulus);
->>>>>>> Sistema de encriptacao e decriptacao
 	int length = (strlen(encrypted_text)) / magnitude;
 	char* decrypted_text = (char*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(char));
 	int* decrypted_values = (int*) malloc((strlen(encrypted_text) / magnitude + 1) * sizeof(int));
@@ -127,24 +111,34 @@ char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public
 	return decrypted_text;
 }
 
-<<<<<<< HEAD
 void brute_force(char* encrypted_text, Public_Key* public_key)
 {
-	char** dictionary = get_dictionary();
+/*	char** dictionary = get_dictionary();
 	Boolean found = FALSE;	
 	unsigned int key;
 	int frequency_of_success = 0;
 	int number_of_words = 0;
-	char delimiters[7] = " .,!?\"'";
+	char delimiters[8] = " .,!?\"'";
 	// Cada letra corresponde a magnitude de publick_key->rsa_modulus
-	char aux[strlen(encrypted_text)* get_magnitude(key->rsa_modulus))];
+<<<<<<< HEAD
+	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus))];
+=======
+	char aux[strlen(encrypted_text)* get_magnitude(public_key->rsa_modulus)];
+>>>>>>> Corrigindo erros de forca bruta
 	char* token;
 	char* tokens[2000];
 	while(!found)
 	{
 		printf("Tentando a chave>> %d\n", key);
 		//Descriptografa o texto
-		decrypt(encrypted_text, key, public_key);
+<<<<<<< HEAD
+		//decrypt(encrypted_text, key, public_key);
+=======
+		Private_Key *private_key = (Private_Key*) malloc(sizeof(Private_Key));
+		private_key->rsa_modulus = public_key->rsa_modulus;
+		private_key->modular_multiplicative_inverse = key;
+		decrypt(encrypted_text, private_key, public_key);
+>>>>>>> Corrigindo erros de forca bruta
 		strcpy(aux, encrypted_text);
 		number_of_words = 0;
 		token = strtok(aux, delimiters);
@@ -154,7 +148,8 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 				token = strtok(NULL, delimiters);
 		}
 		int i, j;
-		long dicionary_lines = numberoflines(dictionary_file);
+		
+		long dicionary_lines = numberoflines(fopen("dicionario.pt.txt", "r"));
 		for (i = 0; i < number_of_words; i++)
 		{
 				for (j = 0; j < dicionary_lines; j++) 
@@ -168,23 +163,10 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 				if ((float) frequency_of_success >= 0.8 * number_of_words) 
 				{
 							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
-							printf("\n\n CHAVE ENCONTRADA: %s\n\n", key);					
-							found = true;
+							printf("\n\n CHAVE ENCONTRADA: %d\n\n", key);					
+							found = TRUE;
 							break;
 				}
 		}
-	}
+	}*/
 }
-=======
-int integer_size(int number)
-{
-	int i = 1, counter = 0;
-	while (number / i != 0) {
-		counter++;
-		i *= 10;
-	}
-	return counter; 
-}
-
-
->>>>>>> Sistema de encriptacao e decriptacao
