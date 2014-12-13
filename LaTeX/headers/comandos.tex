@@ -1,0 +1,58 @@
+\graphicspath{{resource/}}
+\DeclareGraphicsExtensions{.png,.jpg,.pdf}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+\newcommand{\curso}[1]{\def\imprimircurso{#1}}
+
+\newcommand\BackgroundPic{
+	\put(0,0){
+		\parbox[b][\paperheight]{\paperwidth}{
+			\vfill
+			\centering
+			\includegraphics[width=\paperwidth,height=\paperheight,
+				keepaspectratio]{capa}
+			\vfill
+		}
+	}
+}
+
+\renewcommand{\imprimircapa}{
+  \begin{capa}
+    \center
+	\AddToShipoutPicture*{\BackgroundPic}
+
+    \vspace*{6.5cm}
+	{\textbf{\large\imprimirinstituicao}}
+	\par
+	{\textbf{\large\imprimircurso}}
+
+	\vspace*{1cm}
+
+    {\ABNTEXchapterfont\bfseries\LARGE\imprimirtitulo}
+    
+	\begin{flushright}
+    	\textbf{{\large{Grupo 75: \\ \imprimirautor}}}
+		\par
+    	\textbf{{\large{Orientador: \\ \imprimirorientador}}}
+	\end{flushright}
+		
+    \vspace*{0.5cm}
+    \textbf{{\large\imprimirlocal}}
+    \par
+    \textbf{{\large\imprimirdata}}
+    
+  \end{capa}
+}
+
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+\renewcommand{\backref}{}
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+% ---
+
