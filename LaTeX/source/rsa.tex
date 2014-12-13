@@ -1,0 +1,38 @@
+\chapter[O Algoritmo RSA]{O Algoritmo RSA}
+\label{chap:rsa}
+	O RSA é um algoritmo de criptografia de dados amplamente utilizado na área de segurança da informação por garantir a transmissão segura de dados. Esta técnica de encriptação de dados foi desenvolvida por três professores do MIT, Ronald Rivest, Adi Shamir e Leonard Adleman, seu nome é constituído pelas iniciais dos sobrenomes dos seus autores. Foram realizadas diversas tentativas para quebrar o RSA, e o mesmo é um sucesso por ter resistido a todas elas.
+	\\ \indent A ideia é relativamente simples, o algoritmo implementa um sistema de chaves assimétricas e se baseia na teoria clássica dos números. Antes de explicá-lo, farei uma rápida introdução sobre sistemas de chaves assimétricas.
+	\\ \indent Em contraste aos métodos de chaves simétricas, onde existe uma única chave compartilhada entre o emissor e o receptor (Ex: Cifra de César, cifra de Vigenère, cifra afim, etc), um sistema de chaves assimétricas utiliza um par de chaves: uma chave pública e uma chave privada.
+	\\ \indent Neste sistema, cada entidade da rede de comunicações possui um par de chaves pública e privada, sendo que a chave pública é distribuída livremente a todos da rede, enquanto a chave privada deve ser conhecida apenas pelo seu dono. Por exemplo, em uma rede formada pelos personagens João e Maria, cada um deles possuiria seu par de chaves. Caso o João quisesse enviar uma mensagem encriptada à Maria, ele utilizaria a chave pública da Maria para encriptar esta mensagem, e apenas a Maria poderia decifrar a mensagem encriptada para conhecer seu real conteúdo. O processo inverso é análogo.
+	\\ \indent Como já foi dito, o sistema RSA se apoia nos fundamentos da teoria dos números, portanto, serão apresentados alguns conteúdos da área citada, como aritmética modular \cite{shokranian}. O primeiro passo do algoritmo consiste em gerar o par de chaves pública e privada.
+	\\ \indent Para isso, é realizada uma escolha aleatória de dois números primos, $p$ e $q$, significativamente grandes. Em seguida, é calculado o produto $n$ entre esses primos (a título de ilustração, em aplicações reais este produto é da ordem de $1024$ a $4096 bits$. Por exemplo, um número inteiro em um computador geralmente se encontra na ordem de $32 bits$, o que permite uma representação de inteiros no intervalo de $-2^{31}$ à $2^{31}$ aproximadamente! Imagine o que é possível representar com $1024$ bits!).
+	\\ \indent O próximo passo computa a função totiente de Euler em $n$:
+	\begin{equation}
+		\varphi(n) = \varphi(p) * \varphi(q) = \left(p - 1\right)*\left(q - 1\right)
+		\label{eq:phiden}
+	\end{equation}.
+	\indent Em seguida, é escolhido um inteiro $e$ tal que se encontre no intervalo de números entre 1 e $\varphi(n)$ que seja relativamente primo de $\varphi(n)$. Este número $e$, junto com o número $n$ constitui a chave pública!
+	\\ \indent Para calcular a chave privada, basta calcular o inverso multiplicativo $d$ de $e$:
+	\begin{equation}
+		e^{-1} \equiv d (mod \varphi(n))
+		\label{eq:d}
+	\end{equation}
+	\indent Isto é:
+	\begin{equation}
+		e * d (mod \varphi(n)) = 1
+		\label{eq:dsimples}
+	\end{equation}
+	\indent O número $d$ encontrado, juntamente com o número $n$ constitui a chave privada!
+	\\ \indent Após a geração do par de chaves, é possível realizar a encriptação e decifração de mensagens! O processo de encriptação funciona da seguinte forma:
+	\begin{equation}
+		c(m) = m^{e} mod(n)
+		\label{eq:cifrar}
+	\end{equation}
+	\indent Onde $m$ é o dado que será cifrado, e o par $e$ e $n$ são os valores que constituem a chave pública. O processo de decifração é muito similar, como segue:
+	\begin{equation}
+		m(c) = c^{d} mod(n)
+		\label{eq:decifrar}
+	\end{equation}
+	\indent Onde $c$ é o dado cifrado, e o par $d$ e $n$ são os valores que constituem a chave privada! Como foi visto, a encriptação depende apenas da chave pública e a decifração, apenas da privada, o que condiz com o sistema de criptografia de chaves assimétricas.
+	\\ \indent A encriptação produzida pelo algoritmo RSA, rigorosamente falando, não é inquebrável (na verdade, nenhuma encriptação é), o problema é que para realizar as operações necessárias para encontrar a chave privada, o esforço computacional necessário vai muito além da tecnologia existente hoje, o que permite garantir que um computador executando um algoritmo que tente quebrar a encriptação (ou seja, encontrar a chave privada) levaria anos para encontrá-la! É por isso que o RSA é até hoje um dos algoritmos mais seguros existentes na área de segurança da informação. Consequentemente, ele é amplamente utilizado em diversas operações computacionais que envolvam informações sigilosas.
+	\\ \indent Agora que foi explicado a teoria por trás do algoritmo RSA, demonstraremos na prática na Seção \ref{chap:sistema} - \nameref{chap:sistema}, como ele pode ser implementado em linguagem C, desde a geração das chaves, passando pela encriptação e decifração, até um algoritmo que executa uma tentativa de quebra da mensagem cifrada.
