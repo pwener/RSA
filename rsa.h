@@ -1,7 +1,6 @@
 #ifndef RSA_H_
 #define RSA_H_
 
-#include "rsa.h"
 #include "modulus.h"
 #include "text.h"
 #include "msr.h"
@@ -30,5 +29,5 @@ long long int great_common_divisor(long long int first_number, long long int sec
 long long int find_modular_multiplicative_inverse(long long int coprime, long long int euler_totient);
 char* encrypt(char* pure_text, Public_Key* key);
 void brute_force(char* encrypted_text, Public_Key* public_key);
-char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key);
+char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key, Boolean show_info);
 #endif // RSA_H_

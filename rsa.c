@@ -71,14 +71,19 @@ char* encrypt(char* pure_text, Public_Key* key)
 			encrypted_string[k++] = aux[j];
 	}
 	encrypted_string[k] = '\0';
-	printf("%s\n", encrypted_string);	
+
+	if(strlen(encrypted_string)>70)
+	{
+		printf("\n%.70s\n(...+%d", encrypted_string, (encrypted_string-70));		
+		printf(" numbers)\n", encrypted_string, (encrypted_string-70));		
+	}
 
 	free(aux);
 	free(encrypted_values);		
 	return encrypted_string;
 }
 
-char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key)
+char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public_key, Boolean show_info)
 {
 	int i = 0, j = 0, k = 0, l = 0;
 	int magnitude = get_magnitude(public_key->rsa_modulus);
@@ -96,7 +101,17 @@ char* decrypt(char* encrypted_text, Private_Key* private_key, Public_Key* public
 	}
 	for (i = 0; i < l; i++) {
 		decrypted_text[i] = exponential_modulus(decrypted_values[i], private_key->modular_multiplicative_inverse, public_key->rsa_modulus);
+		
+		if(show_info==TRUE)
+		{
+			printf("[%d%%] \tDecrypting...\n", ((int)(i*100)/l));
+		}
 	}
+	if(show_info==TRUE)
+	{
+		printf("[100%%]\tDecrypted\n");
+	}
+
 	decrypted_text[i] = '\0';
 	free(aux);
 	free(decrypted_values);
@@ -122,10 +137,10 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 	private_key->rsa_modulus = public_key->rsa_modulus;
 	while(!found)
 	{
-		printf("Tentando a chave>> %lld\n", key);
+		printf("\nAttempting the Private Key >> %lld\n", key);
 		//Descriptografa o texto
 		private_key->modular_multiplicative_inverse = key;
-		decrypted_text = decrypt(encrypted_text, private_key, public_key);
+		decrypted_text = decrypt(encrypted_text, private_key, public_key,FALSE);
 		number_of_words = 0;
 		strcpy(aux, decrypted_text);
 		token = strtok(decrypted_text, delimiters);
@@ -148,12 +163,11 @@ void brute_force(char* encrypted_text, Public_Key* public_key)
 							break;
 						}
 				}
-
 				if (frequency_of_success >= 0.8 * number_of_words) 
 				{
-							printf("*.*.*.*.*.* ...80%c de acerto atingido... *.*.*.*.*.*\n", '%');
-							printf("\n\n CHAVE ENCONTRADA: %lld\n\n", key);
-							printf("MSG>> %s\n", aux);				
+							printf("\n\n\n\n*.*.*.*.*.* ...80%c of Warranty Reached... *.*.*.*.*.*\n", '%');
+							printf("\n\n PRIVATE KEY FOUNDED: %lld\n\n", key);
+							printf("Decrypted Message >> \n%s\n", aux);				
 							found = TRUE;
 							break;
 				}

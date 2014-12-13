@@ -9,17 +9,18 @@ int file_size(char *path)
 	return file_size;
 }
 
-
 char *get_text_by_file(char *path)
 {
 	char *text;
 	int size = file_size(path);
 	text = (char*) malloc(size * (sizeof(char)));
 	FILE *target = fopen(path, "r");
-	fread(text, sizeof(char), size, target);
+	if(target!=NULL)
+	{
+		fread(text, sizeof(char), size, target);
+	}
 	fclose(target);
 	return text;
-
 }
 
 char *receive_string_from_user(unsigned long long int text_size)
@@ -34,9 +35,12 @@ Boolean export_text_to_file(char *text_input, char *path_input)
 {
 	Boolean is_exportation_worked_fine = FALSE;
 	FILE *standard_text_file = fopen(path_input, "w");
-	fprintf(standard_text_file, "%s", text_input);
+	if(standard_text_file!=NULL)
+	{
+		fprintf(standard_text_file, "%s", text_input);
+		is_exportation_worked_fine = TRUE;
+	}
 	fclose(standard_text_file);
-	is_exportation_worked_fine = TRUE;
 	return is_exportation_worked_fine;
 }
 

@@ -48,6 +48,11 @@ Options run_rsa_functions(Options previous_options)
 	{
 		options = run_hack_functions(options);
 	}
+	else if(options.rsa == RSASEETXT)
+	{
+		see_current_text();
+		options.rsa = RSANONE;
+	}
 	else if(options.rsa == RSANONE)
 	{
 		if(options.text == TXTSUCCESS)
@@ -64,6 +69,30 @@ Options run_rsa_functions(Options previous_options)
 		{
 			explain_text_upload_by_user();
 			options = receive_text_by_user(options);
+		}
+		else if(options.text == TXTONE)
+		{
+			options = receive_example_text(options);
+		}
+		else if(options.text == TXTTWO)
+		{
+			options = receive_example_text(options);
+		}
+		else if(options.text == TXTTRE)
+		{
+			options = receive_example_text(options);
+		}
+		else if(options.text == TXTFOU)
+		{
+			options = receive_example_text(options);
+		}
+		else if(options.text == TXTFIV)
+		{
+			options = receive_example_text(options);
+		}
+		else if(options.text == TXTSIX)
+		{
+			options = receive_example_text(options);
 		}
 		else if(options.text == TXTNONE)
 		{
@@ -146,7 +175,6 @@ Options run_key_functions(Options previous_options)
 	else if(options.gen_key == GKPREVIOUS)
 	{
 		options.gen_key = GKNONE;
-		options.see_key = SKNONE;
 		options.rsa = RSANONE;
 	}
 
@@ -158,6 +186,7 @@ Options run_generate_key(Options previous_options)
 	Options options = previous_options;
 
 	Two_Natural_Numbers prime_numbers = receive_prime_numbers();
+	press_enter();
 
 	if(prime_numbers.first_number == 1 || prime_numbers.second_number == 1)
 	{
@@ -197,7 +226,6 @@ Options run_see_keys_functions(Options previous_options)
 	else if(options.see_key == SKPREVIOUS)
 	{
 		options.see_key = SKNONE;
-		options.gen_key = GKNONE;
 		options.rsa = RSANONE;
 	}
 
@@ -225,7 +253,12 @@ Options run_encrypt_functions(Options previous_options)
 
 	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 
+	print_hline();
+	printf("\n\t\t\tEncrypted Text with RSA\n");
+	printf("\t\t\tPublic Key Used: %d %d\n", pair_of_keys->public_key->rsa_modulus, pair_of_keys->public_key->coprime);
+	print_hline();
 	char *text_encrypted = encrypt(text_reference,pair_of_keys->public_key);
+	print_hline();
 
 	Boolean is_exportation_worked_fine = export_text_to_file(text_encrypted,
 		(char*)"messages/encrypted.txt");
@@ -251,11 +284,11 @@ Options run_encrypt_functions(Options previous_options)
 Options run_decrypt_functions(Options previous_options)
 {
 	Options options = previous_options;
-	char *text_reference = get_text_by_file((char*)"text/exported.txt");
+	char *text_reference = get_text_by_file((char*)"messages/encrypted.txt");
 
 	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
 
-	char *text_decrypted = decrypt(text_reference,pair_of_keys->private_key,pair_of_keys->public_key);
+	char *text_decrypted = decrypt(text_reference,pair_of_keys->private_key,pair_of_keys->public_key,TRUE);
 
 	Boolean is_exportation_worked_fine = export_text_to_file(text_decrypted,
 		(char*)"messages/decrypted.txt");
@@ -279,11 +312,16 @@ Options run_decrypt_functions(Options previous_options)
 Options run_hack_functions(Options previous_options)
 {
 	Options options = previous_options;
-	char *text_reference = get_text_by_file((char*)"text/exported.txt");
+	char *text_reference = get_text_by_file((char*)"messages/encrypted.txt");
+	Pair_of_Keys *pair_of_keys = get_pair_of_keys();
+	Public_Key *public_key = pair_of_keys->public_key;
 
-	// TODO
+	printf("The Public Key Received Is: [%d %d]", public_key->rsa_modulus, public_key->coprime);
+	press_enter();
+	brute_force(text_reference, public_key);
+	press_enter();
 
-	options = get_standard_options_values();
+	options.rsa = RSANONE;
 	return options;	
 }
 
@@ -348,6 +386,30 @@ Options receive_text_upload_option(Options previous_options)
 			options.text = TXTUSER;
 		break;
 
+		case 3:
+			options.text = TXTONE;
+		break;
+
+		case 4:
+			options.text = TXTTWO;
+		break;
+
+		case 5:
+			options.text = TXTTRE;
+		break;
+
+		case 6:
+			options.text = TXTFOU;
+		break;
+
+		case 7:
+			options.text = TXTFIV;
+		break;
+
+		case 8:
+			options.text = TXTSIX;
+		break;
+
 		case 9:
 			options.text = TXTPREVIOUS;
 		break;
@@ -382,6 +444,7 @@ Options receive_text_by_file(Options previous_options)
 			inform_text_is_fine();
 			press_enter();
 			options.text = TXTSUCCESS;
+			options.rsa = RSASEETXT;
 		}
 		else if(is_exportation_worked_fine == FALSE)
 		{
@@ -406,11 +469,60 @@ Options receive_text_by_user(Options previous_options)
 		inform_text_is_fine();
 		press_enter();
 		options.text = TXTSUCCESS;
+		options.rsa = RSASEETXT;
 	}
 	else if(is_exportation_worked_fine == FALSE)
 	{
 		inform_unknown_error();
 		press_enter();
+	}
+
+	return options;
+}
+
+Options receive_example_text(Options previous_options)
+{
+	Options options = previous_options;
+	char* example_text;
+	switch(options.text)
+	{
+		case TXTONE:
+			example_text = get_text_by_file((char*)"examples/the_little_prince_pt.txt");
+		break;
+
+		case TXTTWO:
+			example_text = get_text_by_file((char*)"examples/harry_potter_pt.txt");
+		break;
+
+		case TXTTRE:
+			example_text = get_text_by_file((char*)"examples/sidereus_nuncius_pt.txt");
+		break;
+
+		case TXTFOU:
+			example_text = get_text_by_file((char*)"examples/dostoievski_pt.txt");
+		break;
+
+		case TXTFIV:
+			example_text = get_text_by_file((char*)"examples/love_spotted_pt.txt");
+		break;
+
+		case TXTSIX:
+			example_text = get_text_by_file((char*)"examples/the_beatles_pt.txt");
+		break;
+	}
+	Boolean is_exportation_worked_fine = export_text_to_file(example_text,(char*)"text/exported.txt");
+	if(is_exportation_worked_fine == TRUE)
+	{
+		inform_text_is_fine();
+		press_enter();
+		options.text = TXTSUCCESS;
+		options.rsa = RSASEETXT;
+	}
+	else if(is_exportation_worked_fine == FALSE)
+	{
+		inform_unknown_error();
+		press_enter();
+		options.text = TXTNONE;
 	}
 	return options;
 }
@@ -444,6 +556,10 @@ Options receive_rsa_option(Options previous_options)
 			options.rsa = RSAHACK;
 		break;
 
+		case 6:
+			options.rsa = RSASEETXT;
+		break;
+
 		case 9:
 			options.rsa = RSAPREVIOUS;
 		break;
@@ -474,6 +590,7 @@ Options receive_key_option(Options previous_options)
 		break;
 
 		case 2:
+			options.rsa = RSASEEKEYS;
 			options.gen_key = GKNONE;
 			options.see_key = SKSEE;
 		break;
@@ -509,6 +626,7 @@ Options receive_see_keys_option(Options previous_options)
 		break;
 
 		case 2:
+			options.rsa = RSAGENKEYS;
 			options.see_key = SKNONE;
 			options.gen_key = GKGEN;
 		break;
@@ -744,6 +862,12 @@ void inform_text_upload_option()
 	print_choose();
 	printf("\t[1] Upload a Text File\n");
 	printf("\t[2] Inform Your Own Text\n");
+	printf("\t[3] Utilizar Exemplo: O Pequeno Principe (Antoine de Saint-Exupery)\n");
+	printf("\t[4] Utilizar Exemplo: Harry Potter (JK Rowling)\n");
+	printf("\t[5] Utilizar Exemplo: Sidereus Nuncius (Galileu)\n");
+	printf("\t[6] Utilizar Exemplo: Crime e Castigo (Dostoievski)\n");
+	printf("\t[7] Utilizar Exemplo: Spotted (Desconhecido)\n");
+	printf("\t[8] Utilizar Exemplo: A Day In The Life (The Beatles)\n");
 	print_previous();
 	print_quit();
 	print_hline();
@@ -783,9 +907,21 @@ void inform_rsa_option()
 	printf("\t[3] Encrypt the Text\n");
 	printf("\t[4] Decrypt the Text\n");
 	printf("\t[5] Try to Hack an Encrypted Text\n");
+	printf("\t[6] See The Current Exported Text\n");
 	print_previous();
 	print_quit();
 	print_hline();
+}
+
+void see_current_text()
+{
+	char* current_text = get_text_by_file((char*)"text/exported.txt");
+	print_hline();
+	printf("\n\t\tActual Exported Text\n");
+	print_hline();
+	printf("%s", current_text);
+	print_hline();
+	press_enter();
 }
 
 void explain_rivest_shamir_adleman()
@@ -798,7 +934,7 @@ void explain_rivest_shamir_adleman()
 	printf("\tKey, a.k.a. Decryption Key, is secret and can decrypt the\n");
 	printf("\tthe message encrypted by the Public Key. Both keys are generated\n");
 	printf("\twith two prime numbers! Or at least high enough to be confused as\n");
-	printf("\tone. This software can easily deal with numbers in 9999 order, but\n");
+	printf("\tone. This software can easily deal with numbers in 999 order, but\n");
 	printf("\tis not safe above this.\n\n");
 	print_hline();
 }
@@ -827,6 +963,7 @@ void explain_primes_to_generate_key()
 	printf("\tinform the second prime number and press enter.\n");
 	printf("\tAs Like: <number_one><enter><number_two><enter>\n");
 	printf("\tExample:\n\t\t8969\n\t\t13711\n\n");
+	printf("\tNice Pairs: <13,17> <61,53> <29,19>\n\n");
 }
 
 void explain_see_keys()

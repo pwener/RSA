@@ -31,6 +31,12 @@ typedef enum Text_Option
 	TXTNONE,
 	TXTFILE,
 	TXTUSER,
+	TXTONE,
+	TXTTWO,
+	TXTTRE,
+	TXTFOU,
+	TXTFIV,
+	TXTSIX,
 	TXTSUCCESS,
 	TXTPREVIOUS
 }Text_Opt;
@@ -40,9 +46,12 @@ typedef enum RSA_Option
 	RSANONE,
 	RSAGENKEYS,
 	RSASEEKEYS,
+	RSASEEEXP,
+	RSASEEENC,
 	RSAENCRYPT,
 	RSADECRYPT,
 	RSAHACK,
+	RSASEETXT,
 	RSAPREVIOUS
 }RSA_Opt;
 
@@ -89,6 +98,7 @@ Options receive_type_option(Options previous_options);
 Options receive_text_upload_option(Options previous_options);
 Options receive_text_by_file(Options previous_options);
 Options receive_text_by_user(Options previous_options);
+Options receive_example_text(Options previous_options);
 Options receive_rsa_option(Options previous_options);
 Options receive_key_option(Options previous_options);
 Options receive_see_keys_option(Options previous_options);
@@ -123,6 +133,7 @@ void inform_wrong_path();
 void inform_text_is_fine();
 
 void inform_rsa_option();
+void see_current_text();
 void explain_rivest_shamir_adleman();
 void explain_key_generation();
 void explain_primes_to_generate_key();
